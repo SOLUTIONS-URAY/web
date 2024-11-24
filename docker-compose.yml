@@ -1,0 +1,23 @@
+version: "3.3"
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${PGDATABASE}
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_PORT: ${PGPORT}
+      POSTGRES_DATA: ${PGDATA}
+    ports:
+      - "${PGPORT}:${PGPORT}"
+    volumes:
+      - ./dataDB:/var/lib/postgresql/data
+    user: root
+  redis:
+    image: redis:7.2.4
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/dаta:/root/services
+      - ./redis/services.conf:/usr/local/etc/services/services.conf
