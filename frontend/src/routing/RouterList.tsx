@@ -41,7 +41,7 @@ export const getRoutes = ( isAuthorized: boolean): RouteObject[] => {
         return {
             ...route,
             element: element,
-            errorElement: <ErrorPage />,
+            errorElement: <></>,
         };
     });
 };

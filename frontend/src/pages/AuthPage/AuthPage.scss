@@ -1,0 +1,11 @@
+div.auth_page {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    * {
+        font-family: "Inter", sans-serif;
+    }
+}
