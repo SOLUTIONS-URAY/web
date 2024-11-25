@@ -2,24 +2,20 @@ import {
     BaseEntity,
     Column,
     CreateDateColumn,
-    Entity,
+    Entity, ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm"
 import {User} from "./User";
 import {TicketEvent} from "./TicketEvent";
+import {TicketType} from "./TicketType";
 
 export enum TicketPriority {
+    NONE,
     LOW,
     MEDIUM,
     HIGH
-}
-
-export enum TicketType {
-    SERVICE, // Обслуживание
-    INCIDENT, // Инцидент
-    CHANGE_STATE // Изменение состояние
 }
 
 export enum TicketStatus {
@@ -34,13 +30,17 @@ export class Ticket extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type: "enum", enum: TicketPriority})
+    @Column({
+        type: "enum",
+        enum: TicketPriority,
+        default: TicketPriority.NONE
+    })
     priority: TicketPriority;
 
     @Column()
     title: string;
 
-    @Column({type: "enum", enum: TicketType})
+    @ManyToOne(()=>TicketType)
     type: TicketType;
 
     @OneToMany(() => User, (user) => user.issuedTickets)
@@ -60,4 +60,9 @@ export class Ticket extends BaseEntity {
 
     @OneToMany(() => TicketEvent, (ticket_event) => ticket_event.ticket)
     events: TicketEvent[];
+
+    static async createTicket(title: string, ){
+        const ticket = new Ticket();
+
+    }
 }

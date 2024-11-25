@@ -8,6 +8,8 @@ import {User} from "./models/User";
 import {Init1732450281312} from "./migrations/1732450281312-Init";
 import {Organization} from "./models/Organization";
 import {AddOrganization1732476052030} from "./migrations/1732476052030-AddOrganization";
+import {TicketType} from "./models/TicketType";
+import {NotStaticTicketType1732523088291} from "./migrations/1732523088291-NotStaticTicketType";
 
 const path = process.cwd().split('/');
 path.pop();
@@ -21,7 +23,9 @@ export const typeOrmConfig: DataSourceOptions = {
     username: process.env.PGUSER || 'postgres',
     password: process.env.PGPASSWORD || 'postgres',
     database: process.env.PGDATABASE || 'postgres',
-    entities: [Ticket, TicketEvent, User, Organization],
+    entities: [
+        Ticket, TicketEvent, User, Organization, TicketType
+    ],
     subscribers: [],
     synchronize: false,
     logging: true,
@@ -29,7 +33,8 @@ export const typeOrmConfig: DataSourceOptions = {
     migrationsRun: true,
     migrations: [
         Init1732450281312,
-        AddOrganization1732476052030
+        AddOrganization1732476052030,
+        NotStaticTicketType1732523088291
     ],
 };
 export const dataSource = new DataSource(typeOrmConfig);
