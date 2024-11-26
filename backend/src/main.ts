@@ -14,7 +14,8 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(new ValidationPipe());
     app.use(cookieParser());
-    await app.listen(process.env.PORT ?? 3000);
+    app.setGlobalPrefix("/v1");
+    await app.listen(process.env.BACKEND_PORT ?? 3000);
 }
 
 bootstrap();
