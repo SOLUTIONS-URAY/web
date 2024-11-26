@@ -1,32 +1,11 @@
 version: "3.3"
 services:
-  postgres:
-    image: postgres:13.3
-    environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_DB: ${PGDATABASE}
-      POSTGRES_USER: ${PGUSER}
-      POSTGRES_PASSWORD: ${PGPASSWORD}
-      POSTGRES_PORT: ${PGPORT}
-      POSTGRES_DATA: "/var/lib/postgresql/data/pgdata"
-    ports:
-      - "${PGPORT}:${PGPORT}"
-    volumes:
-      - ./dataDB:/var/lib/postgresql/data
-    user: root
-  redis:
-    image: redis:7.2.4
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./redis/dаta:/root/services
-      - ./redis/services.conf:/usr/local/etc/services/services.conf
-
   frontend:
+    image: ghcr.io/solutions-uray/frontend:${ENV_MODE:-latest}
     environment:
       BURL: "http://backend:${BACKEND_PORT}"
     ports:
-      - "80:80"
+      - "${FRONTEND_PORT}:80"
     volumes:
       - ./frontend/src:/app/src
     build:
@@ -34,9 +13,8 @@ services:
       dockerfile: ./docker/Dockerfile
     stdin_open: true
     tty: true
-    depends_on:
-      - backend
   backend:
+    image: ghcr.io/solutions-uray/backend:${ENV_MODE:-latest}
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
       JWT_SECRET: ${JWT_SECRET}
@@ -45,15 +23,11 @@ services:
       PGUSER: ${PGUSER}
       PGPASSWORD: ${PGPASSWORD}
       PGPORT: ${PGPORT}
-      PGHOST: postgres
+      PGHOST: ${PGHOST}
+      PRODUCT_URL: ${PRODUCT_URL}
       REDIS_URL: redis://redis:6379
-
-    volumes:
-      - ./back/src:/app/src
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     build:
       context: ./backend
       dockerfile: ./docker/Dockerfile
-    depends_on:
-      - postgres

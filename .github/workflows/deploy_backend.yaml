@@ -1,0 +1,65 @@
+name: Deploy Backend
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build a Backend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Build
+        run: docker compose build backend
+        env:
+          ENV_MODE: prod
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push to registry
+        run: docker push ghcr.io/SOLUTIONS-URAY/backend:prod
+
+
+  deploy:
+    runs-on: [ self-hosted, prod ]
+    needs: [ build ]
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Pull backend from registry
+        run: docker pull ghcr.io/SOLUTIONS-URAY/backend:prod
+
+      - name: Start with Docker Compose
+        run: docker compose up backend -d --force-recreate
+        env:
+          COMPOSE_PROJECT_NAME: prod
+          ENV_MODE: prod
+          BACKEND_PORT: ${{ secrets.PROD_BACKEND_PORT }}
+          JWT_SECRET: ${{ secrets.PROD_JWT_SECRET }}
+          JWT_EXPIRESIN: ${{ secrets.PROD_JWT_EXPIRESIN }}
+          PGDATABASE: ${{ secrets.PROD_PGDATABASE }}
+          PGUSER: ${{ secrets.PROD_PGUSER }}
+          PGPASSWORD: ${{ secrets.PROD_PGPASSWORD }}
+          PGPORT: ${{ secrets.PROD_PGPORT }}
+          PGHOST: ${{ secrets.PROD_PGHOST }}
+          PRODUCT_URL: ${{ secrets.PROD_PRODUCT_URL }}
