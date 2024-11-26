@@ -21,3 +21,16 @@ services:
     volumes:
       - ./redis/dаta:/root/services
       - ./redis/services.conf:/usr/local/etc/services/services.conf
+
+  frontend:
+    environment:
+      BURL: "http://backend:${BACKEND_PORT}"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/src:/app/src
+    build:
+      context: ./frontend
+      dockerfile: ./docker/Dockerfile
+    stdin_open: true
+    tty: true
