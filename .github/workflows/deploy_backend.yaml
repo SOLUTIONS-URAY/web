@@ -25,6 +25,8 @@ jobs:
         run: docker compose build backend
         env:
           ENV_MODE: prod
+          BACKEND_PORT: ${{ secrets.PROD_BACKEND_PORT }}
+          FRONTEND_PORT: ${{ secrets.PROD_FRONTEND_PORT }}
 
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
