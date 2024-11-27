@@ -11,8 +11,9 @@ import {AddOrganization1732476052030} from "./migrations/1732476052030-AddOrgani
 import {TicketType} from "./models/TicketType";
 import {NotStaticTicketType1732523088291} from "./migrations/1732523088291-NotStaticTicketType";
 import {FixRelations1732704373197} from "./migrations/1732704373197-FixRelations";
+import {AddSyntData1732729193083} from "./migrations/1732729193083-AddSyntData";
 
-const path = process.cwd().split('/');
+const path = process.cwd().replaceAll("\\", "/").split('/');
 path.pop();
 dotenv.config({path: path.join('/') + '/.env'});
 
@@ -36,7 +37,8 @@ export const typeOrmConfig: DataSourceOptions = {
         Init1732450281312,
         AddOrganization1732476052030,
         NotStaticTicketType1732523088291,
-        FixRelations1732704373197
+        FixRelations1732704373197,
+        AddSyntData1732729193083
     ],
 };
 export const dataSource = new DataSource(typeOrmConfig);
