@@ -1,4 +1,5 @@
 import {FullLogo} from "../Images/FullLogo/FullLogo.tsx";
+import "./Navbar.scss";
 
 export const Navbar = () => {
     return (

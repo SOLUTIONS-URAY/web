@@ -1,5 +1,6 @@
 import {FilterButton} from "../../components/FilterButton/FilterButton.tsx";
 import {TicketEntity, TicketPriority, TicketStatus, TicketTable} from "../../components/TicketTable/TicketTable.tsx";
+import "./ControlPage.scss";
 
 const data: TicketEntity[] = [
     {
