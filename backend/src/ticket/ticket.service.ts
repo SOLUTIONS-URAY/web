@@ -121,6 +121,7 @@ export class TicketService {
                 events: true
             }
         });
+        const lastValue = ticket.priority;
         ticket.priority = newPriority;
 
         const user = await manager.findOne(User, {
@@ -129,7 +130,7 @@ export class TicketService {
 
         const event = new TicketEvent();
         event.type = TicketEventType.CHANGE_PRIORITY;
-        event.message = "";
+        event.message = "c "+lastValue+" на "+newPriority;
         event.ticket = ticket;
         event.author = user;
 

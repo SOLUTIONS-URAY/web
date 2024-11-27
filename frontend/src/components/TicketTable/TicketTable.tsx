@@ -1,6 +1,7 @@
 import {FC} from "react";
 import "./TicketTable.scss";
 import {TicketEntity} from "../../types/TicketEntity.ts";
+import {useNavigate} from "react-router-dom";
 
 export enum TicketPriority {
     NONE,
@@ -23,6 +24,8 @@ interface TicketTableProps {
 }
 
 export const TicketTable : FC<TicketTableProps> = ({tickets}) => {
+    const navigate = useNavigate();
+
     return (
         <div className="control_table">
             <table className="control">
@@ -40,7 +43,7 @@ export const TicketTable : FC<TicketTableProps> = ({tickets}) => {
                 </thead>
                 <tbody>
                     {tickets && tickets.map(ticket => (
-                        <tr key={ticket.id}>
+                        <tr key={ticket.id} onClick={()=>navigate("/ticket/"+ticket.id)}>
                             <th scope="row">{ticket.id}</th>
                             <td>{ticket.priority}</td>
                             <td>{ticket.title}</td>
