@@ -13,6 +13,11 @@ export const enum PagePath {
 
 export const Routes: Route[] = [
     {
+        path: PagePath.home,
+        element: <AuthPage />,
+        protected: false,
+    },
+    {
         path: PagePath.auth,
         element: <AuthPage />,
         protected: false,

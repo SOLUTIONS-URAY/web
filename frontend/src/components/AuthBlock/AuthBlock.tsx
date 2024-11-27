@@ -1,8 +1,36 @@
-import React from "react";
+import React, {useState} from "react";
 import "./AuthBlock.scss";
 import {FullLogo} from "../Images/FullLogo/FullLogo.tsx";
+import {auth} from "../../api/auth.ts";
+import {toast} from "react-toastify";
 
 export const AuthBlock = () => {
+    const [emailText, setEmailText] = useState("");
+    const [passwordText, setPasswordText] = useState("");
+
+    const onEmailTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmailText(e.target.value);
+    }
+    const onPasswordTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPasswordText(e.target.value);
+    }
+
+    const onAuthButtonClick = () => {
+        console.log(emailText, passwordText)
+        auth(emailText, passwordText)
+            .then(({access_token, user_data})=>{
+                console.log("Sus", access_token);
+                localStorage.setItem("access_token", access_token);
+                localStorage.setItem("user_data", JSON.stringify(user_data));
+
+                window.location.href = '/control';
+            })
+            .catch((err)=>{
+                toast.error(err.message || "Неизвестная ошибка");
+                console.error("AuthBlock auth error:", err);
+            })
+    }
+
     return (
         <div className="auth_block">
             <div className="auth_block_inner_content">
@@ -13,19 +41,23 @@ export const AuthBlock = () => {
                     <div className="auth_block_form_inputs">
                         <div className="auth_block_input_login">
                             <input
-                                type="text"
-                                placeholder="Почта или телефон"
+                                type="email"
+                                placeholder="Почта"
+                                value={emailText}
+                                onChange={onEmailTextChange}
                             />
                         </div>
                         <div className="auth_block_input_password">
                             <input
                                 type="password"
                                 placeholder="Пароль"
+                                value={passwordText}
+                                onChange={onPasswordTextChange}
                             />
                         </div>
                     </div>
                     <div className="auth_block_form_button">
-                        <button className="auth_block_form">
+                        <button className="auth_block_form" onClick={onAuthButtonClick}>
                             Войти
                         </button>
                     </div>
