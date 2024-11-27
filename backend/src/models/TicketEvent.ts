@@ -1,4 +1,4 @@
-import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm"
+import {BaseEntity, Column, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn} from "typeorm"
 import {User} from "./User";
 import {Ticket} from "./Ticket";
 
@@ -23,6 +23,7 @@ export class TicketEvent extends BaseEntity {
     message: string;
 
     @ManyToOne(() => User, (user) => user.ticket_events)
+    @JoinTable()
     author: User;
 
     @ManyToOne(() => Ticket, (ticket) => ticket.events)

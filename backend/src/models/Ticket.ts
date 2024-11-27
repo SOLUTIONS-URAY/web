@@ -2,7 +2,7 @@ import {
     BaseEntity,
     Column,
     CreateDateColumn,
-    Entity, ManyToOne,
+    Entity, JoinTable, ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
@@ -59,10 +59,7 @@ export class Ticket extends BaseEntity {
     status: TicketStatus;
 
     @OneToMany(() => TicketEvent, (ticket_event) => ticket_event.ticket)
+    @JoinTable()
     events: TicketEvent[];
 
-    static async createTicket(title: string, ){
-        const ticket = new Ticket();
-
-    }
 }
