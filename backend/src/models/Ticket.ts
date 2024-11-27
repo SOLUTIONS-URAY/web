@@ -43,10 +43,10 @@ export class Ticket extends BaseEntity {
     @ManyToOne(()=>TicketType)
     type: TicketType;
 
-    @OneToMany(() => User, (user) => user.issuedTickets)
+    @ManyToOne(() => User, (user) => user.issuedTickets)
     issuedUser: User;
 
-    @OneToMany(() => User, (user) => user.issuedTickets, {nullable: true})
+    @ManyToOne(() => User, (user) => user.issuedTickets, {nullable: true})
     assignedUser?: User;
 
     @CreateDateColumn({type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)"})

@@ -1,4 +1,6 @@
 import {FC} from "react";
+import "./TicketTable.scss";
+import {TicketEntity} from "../../types/TicketEntity.ts";
 
 export enum TicketPriority {
     NONE,
@@ -14,25 +16,7 @@ export enum TicketStatus {
     CLOSED
 }
 
-export type TicketEntity = {
-    id: number;
-    priority: TicketPriority;
-    title: string;
-    type: {
-        id?: number;
-        name: string;
-    };
-    issuedUser: {
-        email: string;
-        fullName: string;
-    };
-    assignedUser?: {
-        email: string;
-        fullName: string;
-    };
-    created_at: Date;
-    status: TicketStatus;
-}
+
 
 interface TicketTableProps {
     tickets: TicketEntity[];
@@ -63,7 +47,7 @@ export const TicketTable : FC<TicketTableProps> = ({tickets}) => {
                             <td>{ticket.type.name}</td>
                             <th>{ticket.issuedUser.email}</th>
                             <td>{ticket.assignedUser?.fullName}</td>
-                            <td>{ticket.created_at.toDateString()}</td>
+                            <td>{ticket.created_at}</td>
                             <td>{ticket.status}</td>
                         </tr>
                     ))}

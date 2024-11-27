@@ -10,6 +10,7 @@ import {Organization} from "./models/Organization";
 import {AddOrganization1732476052030} from "./migrations/1732476052030-AddOrganization";
 import {TicketType} from "./models/TicketType";
 import {NotStaticTicketType1732523088291} from "./migrations/1732523088291-NotStaticTicketType";
+import {FixRelations1732704373197} from "./migrations/1732704373197-FixRelations";
 
 const path = process.cwd().split('/');
 path.pop();
@@ -34,7 +35,8 @@ export const typeOrmConfig: DataSourceOptions = {
     migrations: [
         Init1732450281312,
         AddOrganization1732476052030,
-        NotStaticTicketType1732523088291
+        NotStaticTicketType1732523088291,
+        FixRelations1732704373197
     ],
 };
 export const dataSource = new DataSource(typeOrmConfig);

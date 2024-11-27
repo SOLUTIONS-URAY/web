@@ -4,11 +4,13 @@ import { Navigate } from "react-router-dom";
 import {AuthorizedContainer} from "../containers/AuthorizedContainer/AuthorizedContainer.tsx";
 import {AuthPage} from "../pages/AuthPage/AuthPage.tsx";
 import {ControlPage} from "../pages/ControlPage/ControlPage.tsx";
+import {TicketPage} from "../pages/TicketPage/TicketPage.tsx";
 
 export const enum PagePath {
     home = "/",
     auth = "/auth",
     control = "/control",
+    ticket = "/ticket/:ticketId"
 }
 
 export const Routes: Route[] = [
@@ -25,8 +27,13 @@ export const Routes: Route[] = [
     {
         path: PagePath.control,
         element: <ControlPage />,
-        protected: true
+        protected: true,
     },
+    {
+        path: PagePath.ticket,
+        element: <TicketPage/>,
+        protected: true,
+    }
 ];
 
 interface Route {
