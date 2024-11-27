@@ -14,11 +14,7 @@ jobs:
         id: extract_branch
       - name: Refetch
         run: git fetch --unshallow origin
-      - name: Add target remote
-        run: git remote add target ssh://git@gitlab.hackathon.uriit.ru:2224/solutions/web.git
       - name: Push
         run: git push -u target ${BRANCH}
         env:
           BRANCH: ${{ steps.extract_branch.outputs.branch }}
-      - name: Remove target remote
-        run: git remote remove target
