@@ -4,6 +4,13 @@ import {FullLogo} from "../Images/FullLogo/FullLogo.tsx";
 import {auth} from "../../api/auth.ts";
 import {toast} from "react-toastify";
 
+const validateEmail = (email) => {
+    return String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+};
 export const AuthBlock = () => {
     const [emailText, setEmailText] = useState("");
     const [passwordText, setPasswordText] = useState("");
@@ -16,7 +23,20 @@ export const AuthBlock = () => {
     }
 
     const onAuthButtonClick = () => {
-        console.log(emailText, passwordText)
+        console.log(emailText, passwordText);
+        if (emailText == ""){
+            toast.error("Введите почту");
+            return;
+        }
+        if (passwordText == ""){
+            toast.error("Введите пароль");
+            return;
+        }
+        if (!validateEmail(emailText)){
+            toast.error("Введите верную почту");
+            return;
+        }
+
         auth(emailText, passwordText)
             .then(({access_token, user_data})=>{
                 console.log("Sus", access_token);
