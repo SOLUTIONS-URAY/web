@@ -9,6 +9,8 @@ services:
       POSTGRES_PASSWORD: ${PGPASSWORD}
       POSTGRES_PORT: ${PGPORT}
       POSTGRES_DATA: "/var/lib/postgresql/data/pgdata"
+      TZ: 'GMT+5'
+      PGTZ: 'GMT+5'
     ports:
       - "${PGPORT}:${PGPORT}"
     volumes:

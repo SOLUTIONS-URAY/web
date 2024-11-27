@@ -1,0 +1,56 @@
+div.ticket_status_badge {
+  min-width: 130px;
+  border-radius: 0.75rem;
+
+  p.ticket_status_badge_text {
+    margin: 0.25rem 1.5rem;
+    text-align: center;
+    font-weight: 500;
+  }
+
+
+  &.ticket_status_badge_not_assigned {
+    background-color: #FFCCCD;
+
+    p {
+      color: #FF0004;
+    }
+  }
+
+  &.ticket_status_badge_working {
+    background-color: #CCE8FF;
+
+    p {
+      color: #008CFF;
+    }
+  }
+
+  &.ticket_status_badge_waiting_client {
+    background-color: #FFF0BF;
+
+    p {
+      color: #F9B516;
+      margin-left: 0.75rem;
+      margin-right: 0.75rem;
+    }
+  }
+
+  &.ticket_status_badge_answer_required {
+    background-color: #E9CCFF;
+
+    p {
+      color: #9747FF;
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+  }
+
+  &.ticket_status_badge_closed {
+    background-color: #E8E8E8;
+
+    p {
+      color: #525252;
+    }
+  }
+
+}

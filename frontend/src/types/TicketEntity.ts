@@ -7,7 +7,7 @@ export type TicketEntity = {
     title: string;
     type: {
         id?: number;
-        name: string;
+        name?: string;
     };
     issuedUser: {
         id: number;

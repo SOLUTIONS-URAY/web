@@ -50,7 +50,7 @@ export const TicketTable : FC<TicketTableProps> = ({tickets}) => {
                             <td>{ticket.type.name}</td>
                             <th>{ticket.issuedUser.email}</th>
                             <td>{ticket.assignedUser?.fullName}</td>
-                            <td>{ticket.created_at}</td>
+                            <td>{(new Date(ticket.created_at)).toLocaleString("ru-RU")}</td>
                             <td>{ticket.status}</td>
                         </tr>
                     ))}

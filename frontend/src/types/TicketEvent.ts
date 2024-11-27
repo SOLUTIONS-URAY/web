@@ -13,5 +13,6 @@ export type TicketEvent = {
     author: {
         fullName: string;
         id: number;
-    }
+    },
+    created_at: string;
 }

@@ -2,7 +2,9 @@ import {
     BaseEntity,
     Column,
     CreateDateColumn,
-    Entity, JoinTable, ManyToOne,
+    Entity,
+    JoinTable,
+    ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
@@ -19,9 +21,10 @@ export enum TicketPriority {
 }
 
 export enum TicketStatus {
-    PROCESSING,
+    NOT_ASSIGNED,
     WORKING,
-    WAITING_RESPONSE,
+    WAITING_CLIENT,
+    ANSWER_REQUIRED,
     CLOSED
 }
 

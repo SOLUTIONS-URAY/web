@@ -12,6 +12,9 @@ import {TicketType} from "./models/TicketType";
 import {NotStaticTicketType1732523088291} from "./migrations/1732523088291-NotStaticTicketType";
 import {FixRelations1732704373197} from "./migrations/1732704373197-FixRelations";
 import {AddSyntData1732729193083} from "./migrations/1732729193083-AddSyntData";
+import {ChangeTicketStatusEnum1732734618117} from "./migrations/1732734618117-ChangeTicketStatusEnum";
+import {AddCreatedAtFieldToTicketEvent1732739075549} from "./migrations/1732739075549-AddCreatedAtFieldToTicketEvent";
+import {AddTypeForTicketEvent1732746313642} from "./migrations/1732746313642-AddTypeForTicketEvent";
 
 const path = process.cwd().replaceAll("\\", "/").split('/');
 path.pop();
@@ -38,7 +41,10 @@ export const typeOrmConfig: DataSourceOptions = {
         AddOrganization1732476052030,
         NotStaticTicketType1732523088291,
         FixRelations1732704373197,
-        AddSyntData1732729193083
+        AddSyntData1732729193083,
+        ChangeTicketStatusEnum1732734618117,
+        AddCreatedAtFieldToTicketEvent1732739075549,
+        AddTypeForTicketEvent1732746313642
     ],
 };
 export const dataSource = new DataSource(typeOrmConfig);

@@ -1,4 +1,4 @@
-import {BaseEntity, Column, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn} from "typeorm"
+import {BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn} from "typeorm"
 import {User} from "./User";
 import {Ticket} from "./Ticket";
 
@@ -8,6 +8,7 @@ export enum TicketEventType {
     CHANGE_ISSUED_USER,
     CHANGE_ASSIGNED_USER,
     CHANGE_STATUS,
+    CHANGE_TYPE,
     ADD_COMMENTARY
 }
 
@@ -28,4 +29,7 @@ export class TicketEvent extends BaseEntity {
 
     @ManyToOne(() => Ticket, (ticket) => ticket.events)
     ticket: Ticket;
+
+    @CreateDateColumn({type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)"})
+    created_at: Date;
 }
