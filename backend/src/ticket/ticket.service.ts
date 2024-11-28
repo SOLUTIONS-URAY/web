@@ -3,14 +3,14 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {DataSource, EntityManager, Repository} from 'typeorm';
-import {Ticket, TicketPriority, TicketStatus} from '../models/Ticket';
-import {TicketEvent, TicketEventType} from '../models/TicketEvent';
-import {User, UserRole} from '../models/User';
-import {UpdateTicketDto} from './dto/update.ticket.dto';
-import {TicketType} from '../models/TicketType';
-import {CreateTicketDto} from './dto/create.ticket.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
+import { Ticket, TicketPriority, TicketStatus } from '../models/Ticket';
+import { TicketEvent, TicketEventType } from '../models/TicketEvent';
+import { User, UserRole } from '../models/User';
+import { UpdateTicketDto } from './dto/update.ticket.dto';
+import { TicketType } from '../models/TicketType';
+import { CreateTicketDto } from './dto/create.ticket.dto';
 
 const TICKET_STATUS_NAMES = [
   'Не назначено',
@@ -24,15 +24,14 @@ const TICKET_PRIORITY_NAMES = ['Не назначен', 'Низкий', 'Сре�
 @Injectable()
 export class TicketService {
   constructor(
-      @InjectRepository(Ticket)
-      private ticketsRepository: Repository<Ticket>,
-      @InjectRepository(TicketEvent)
-      private ticketEventsRepository: Repository<TicketEvent>,
-      @InjectRepository(TicketType)
-      private ticketTypesRepository: Repository<TicketType>,
-      private dataSource: DataSource,
-  ) {
-  }
+    @InjectRepository(Ticket)
+    private ticketsRepository: Repository<Ticket>,
+    @InjectRepository(TicketEvent)
+    private ticketEventsRepository: Repository<TicketEvent>,
+    @InjectRepository(TicketType)
+    private ticketTypesRepository: Repository<TicketType>,
+    private dataSource: DataSource,
+  ) {}
 
   async getTicketTypes() {
     return await this.ticketTypesRepository.find();
@@ -135,23 +134,23 @@ export class TicketService {
   }
 
   async changePriority(
-      manager: EntityManager,
-      newPriority: TicketPriority,
-      user: User,
-      id: number,
+    manager: EntityManager,
+    newPriority: TicketPriority,
+    user: User,
+    id: number,
   ) {
-    const ticket = await manager.findOneBy(Ticket, {id});
+    const ticket = await manager.findOneBy(Ticket, { id });
     const lastValue = ticket.priority;
     ticket.priority = newPriority;
 
     const event = new TicketEvent();
     event.type = TicketEventType.CHANGE_PRIORITY;
     event.message =
-        "c '" +
-        TICKET_PRIORITY_NAMES[lastValue] +
-        "' на '" +
-        TICKET_PRIORITY_NAMES[newPriority] +
-        "'";
+      "c '" +
+      TICKET_PRIORITY_NAMES[lastValue] +
+      "' на '" +
+      TICKET_PRIORITY_NAMES[newPriority] +
+      "'";
     event.ticket = ticket;
     event.author = user;
 
@@ -162,12 +161,12 @@ export class TicketService {
   }
 
   async changeTitle(
-      manager: EntityManager,
-      newTitle: string,
-      user: User,
-      id: number,
+    manager: EntityManager,
+    newTitle: string,
+    user: User,
+    id: number,
   ) {
-    const ticket = await manager.findOneBy(Ticket, {id});
+    const ticket = await manager.findOneBy(Ticket, { id });
     const lastValue = ticket.title;
     ticket.title = newTitle;
 
@@ -184,23 +183,23 @@ export class TicketService {
   }
 
   async changeStatus(
-      manager: EntityManager,
-      newStatus: number,
-      user: User,
-      id: number,
+    manager: EntityManager,
+    newStatus: number,
+    user: User,
+    id: number,
   ) {
-    const ticket = await manager.findOneBy(Ticket, {id});
+    const ticket = await manager.findOneBy(Ticket, { id });
     const lastValue = ticket.status;
     ticket.status = newStatus;
 
     const event = new TicketEvent();
     event.type = TicketEventType.CHANGE_STATUS;
     event.message =
-        "c '" +
-        TICKET_STATUS_NAMES[lastValue] +
-        "' на '" +
-        TICKET_STATUS_NAMES[newStatus] +
-        "'";
+      "c '" +
+      TICKET_STATUS_NAMES[lastValue] +
+      "' на '" +
+      TICKET_STATUS_NAMES[newStatus] +
+      "'";
     event.ticket = ticket;
     event.author = user;
 
@@ -211,16 +210,16 @@ export class TicketService {
   }
 
   async changeType(
-      manager: EntityManager,
-      newTypeId: number,
-      user: User,
-      id: number,
+    manager: EntityManager,
+    newTypeId: number,
+    user: User,
+    id: number,
   ) {
     const ticket = await manager.findOne(Ticket, {
-      where: {id},
-      relations: {type: true},
+      where: { id },
+      relations: { type: true },
     });
-    const newType = await manager.findOneBy(TicketType, {id: newTypeId});
+    const newType = await manager.findOneBy(TicketType, { id: newTypeId });
     const lastValue = ticket.type;
     ticket.type = newType;
 
@@ -237,21 +236,21 @@ export class TicketService {
   }
 
   async changeAssignedUser(
-      manager: EntityManager,
-      newAssignedUserId: number,
-      user: User,
-      id: number,
+    manager: EntityManager,
+    newAssignedUserId: number,
+    user: User,
+    id: number,
   ) {
     const ticket = await manager.findOne(Ticket, {
-      where: {id},
-      relations: {assignedUser: true},
+      where: { id },
+      relations: { assignedUser: true },
     });
     const newAssignedUser = await manager.findOneBy(User, {
       id: newAssignedUserId,
     });
     if (newAssignedUser.userRole !== UserRole.ORG_MASTER)
       throw new BadRequestException(
-          'Указанный пользователь не является специалистом',
+        'Указанный пользователь не является специалистом',
       );
 
     const lastValue = ticket.assignedUser;
@@ -260,7 +259,7 @@ export class TicketService {
     const event = new TicketEvent();
     event.type = TicketEventType.CHANGE_ASSIGNED_USER;
     event.message =
-        "c '" + lastValue.fullName + "' на '" + newAssignedUser.fullName + "'";
+      "c '" + lastValue.fullName + "' на '" + newAssignedUser.fullName + "'";
     event.ticket = ticket;
     event.author = user;
 
@@ -282,7 +281,7 @@ export class TicketService {
         },
       });
       const user = await manager.findOne(User, {
-        where: {id: userId},
+        where: { id: userId },
       });
 
       if (!ticket)
@@ -293,7 +292,7 @@ export class TicketService {
       if (ticket.priority !== newTicket.priority) {
         if (user.userRole !== 0)
           throw new BadRequestException(
-              'У пользователя нет прав на изменение приоритета',
+            'У пользователя нет прав на изменение приоритета',
           );
         await this.changePriority(manager, newTicket.priority, user, ticket.id);
       }
@@ -308,20 +307,20 @@ export class TicketService {
       }
       if (ticket.assignedUser.id !== newTicket.assignedUser.id) {
         await this.changeAssignedUser(
-            manager,
-            newTicket.assignedUser.id,
-            user,
-            ticket.id,
+          manager,
+          newTicket.assignedUser.id,
+          user,
+          ticket.id,
         );
       }
     });
 
-    return await this.ticketsRepository.findOneBy({id: newTicket.id});
+    return await this.ticketsRepository.findOneBy({ id: newTicket.id });
   }
 
   async comment(msg: string, userId: number, id: number) {
     const user = await this.dataSource.manager.findOne(User, {
-      where: {id: userId},
+      where: { id: userId },
     });
     const ticket = await this.ticketsRepository.findOne({
       where: {
@@ -344,7 +343,7 @@ export class TicketService {
   async create(newTicket: CreateTicketDto) {
     return await this.dataSource.transaction(async (manager) => {
       let user = await manager.findOne(User, {
-        where: {email: newTicket.email},
+        where: { email: newTicket.email },
       });
       if (!user) {
         user = new User();
@@ -358,7 +357,7 @@ export class TicketService {
       }
 
       const ticket_type = await manager.findOne(TicketType, {
-        where: {id: newTicket.typeId},
+        where: { id: newTicket.typeId },
       });
       if (!ticket_type)
         throw new BadRequestException('Тип заявки с таким ID не найден');

@@ -1,6 +1,6 @@
-import {IsEnum, IsNotEmpty, IsNumber} from 'class-validator';
-import {TicketPriority, TicketStatus} from '../../models/Ticket';
-import {Type} from 'class-transformer';
+import { IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
+import { TicketPriority, TicketStatus } from '../../models/Ticket';
+import { Type } from 'class-transformer';
 
 class UpdateTicketDtoNestedId {
   @IsNumber()
