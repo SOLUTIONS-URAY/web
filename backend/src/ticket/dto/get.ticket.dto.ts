@@ -1,6 +1,6 @@
-import {IsNumberString, Min} from 'class-validator';
+import {IsNumberString} from 'class-validator';
 
 export class GetTicketDto {
-    @IsNumberString()
-    id: number;
+  @IsNumberString()
+  id: number;
 }

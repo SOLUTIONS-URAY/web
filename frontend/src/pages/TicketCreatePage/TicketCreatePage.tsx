@@ -1,17 +1,14 @@
-import React, {PropsWithChildren, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./TicketCreatePage.scss"
 import {useUserData} from "../../hooks/useUserData.tsx";
 import useSWR from "swr";
-import {TicketStatus} from "../../components/TicketTable/TicketTable.tsx";
 import {updateTicket} from "../../api/createTicket.ts";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import {Navbar} from "../../components/Navbar/Navbar.tsx";
 
-interface TicketCreatePageProps {
-}
 
-export const TicketCreatePage = (props: PropsWithChildren<TicketCreatePageProps>) => {
+export const TicketCreatePage = () => {
     const userData = useUserData();
     const navigate = useNavigate();
 
@@ -97,7 +94,7 @@ export const TicketCreatePage = (props: PropsWithChildren<TicketCreatePageProps>
                         </div>
                         <div className="ticket_create_input">
                             <select onChange={onChangeTicketType} value={ticketTypeId}>
-                                {ticketTypes && ticketTypes.map((type, key) => (
+                                {ticketTypes && ticketTypes.map((type) => (
                                     <option value={type.id} key={type.id}>{type.name}</option>
                                 ))}
                                 {ticketTypesError && (

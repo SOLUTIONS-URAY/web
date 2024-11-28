@@ -1,5 +1,5 @@
 import {fetcher, HttpMethod} from "../fetcher.ts";
-import {TicketEntity, TicketEntityWithEvents} from "../types/TicketEntity.ts";
+import {TicketEntity} from "../types/TicketEntity.ts";
 
 export type TicketToCreate = {
     typeId: number;

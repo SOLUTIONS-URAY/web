@@ -1,6 +1,6 @@
-import {BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn} from "typeorm"
-import {User} from "./User";
-import {Ticket} from "./Ticket";
+import {BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn,} from 'typeorm';
+import {User} from './User';
+import {Ticket} from './Ticket';
 
 export enum TicketEventType {
     CHANGE_PRIORITY,
@@ -9,18 +9,18 @@ export enum TicketEventType {
     CHANGE_ASSIGNED_USER,
     CHANGE_STATUS,
     CHANGE_TYPE,
-    ADD_COMMENTARY
+    ADD_COMMENTARY,
 }
 
 @Entity()
 export class TicketEvent extends BaseEntity {
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn('uuid')
     uuid: string;
 
-    @Column({type: "enum", enum: TicketEventType})
+    @Column({type: 'enum', enum: TicketEventType})
     type: TicketEventType;
 
-    @Column({type: "varchar", length: 1024})
+    @Column({type: 'varchar', length: 1024})
     message: string;
 
     @ManyToOne(() => User, (user) => user.ticket_events)
@@ -30,6 +30,9 @@ export class TicketEvent extends BaseEntity {
     @ManyToOne(() => Ticket, (ticket) => ticket.events)
     ticket: Ticket;
 
-    @CreateDateColumn({type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)"})
+    @CreateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+    })
     created_at: Date;
 }

@@ -1,5 +1,5 @@
-import {BaseEntity, Column, Entity, JoinTable, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm"
-import {User} from "./User";
+import {BaseEntity, Column, Entity, JoinTable, OneToMany, OneToOne, PrimaryGeneratedColumn,} from 'typeorm';
+import {User} from './User';
 
 @Entity()
 export class Organization extends BaseEntity {

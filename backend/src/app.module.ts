@@ -3,7 +3,7 @@ import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {ConfigModule} from '@nestjs/config';
 import {typeOrmConfig} from './db.config';
-import {TypeOrmModule} from "@nestjs/typeorm";
+import {TypeOrmModule} from '@nestjs/typeorm';
 import {AuthModule} from './auth/auth.module';
 import {TicketModule} from './ticket/ticket.module';
 import {UserModule} from './user/user.module';
@@ -16,7 +16,7 @@ import {UserModule} from './user/user.module';
         TypeOrmModule.forRoot(typeOrmConfig),
         AuthModule,
         TicketModule,
-        UserModule
+        UserModule,
     ],
     controllers: [AppController],
     providers: [AppService],

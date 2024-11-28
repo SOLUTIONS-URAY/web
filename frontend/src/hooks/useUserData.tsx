@@ -1,4 +1,4 @@
-import {PropsWithChildren, useEffect, useLayoutEffect, useState} from "react";
+import {useLayoutEffect, useState} from "react";
 import {UserData} from "../api/auth.ts";
 
 export const useUserData = () => {

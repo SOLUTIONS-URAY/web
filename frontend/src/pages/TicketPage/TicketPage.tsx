@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useLayoutEffect, useState} from "react";
+import React, {useLayoutEffect, useState} from "react";
 import "./TicketPage.scss"
 import {TicketEntity} from "../../types/TicketEntity.ts";
 import {TicketEvent} from "../../types/TicketEvent.ts";
@@ -25,7 +25,7 @@ const TicketEventNaming = [
     "добавил (-а) сообщение: ",
 ]
 
-export const TicketPage = (props: PropsWithChildren) => {
+export const TicketPage = () => {
     const [ticketInfo, setTicketInfo] = useState<TicketEntity | null>();
     const [ticketEvents, setTicketEvents] = useState<TicketEvent[]>([]);
     const [adderMsgText, setAdderMsgText] = useState("");
@@ -153,7 +153,7 @@ export const TicketPage = (props: PropsWithChildren) => {
                     <div className="ticket_info_block">
                         <p className="ticket_info_title">Тип заявки:</p>
                         <select onChange={onChangeTicketType} value={ticketInfo?.type.id}>
-                            {ticketTypes && ticketTypes.map((type, key) => (
+                            {ticketTypes && ticketTypes.map((type) => (
                                 <option value={type.id} key={type.id}>{type.name}</option>
                             ))}
                             {ticketTypesError && (
@@ -171,7 +171,7 @@ export const TicketPage = (props: PropsWithChildren) => {
                     <div className="ticket_info_block">
                         <p className="ticket_info_title">Ответственный:</p>
                         <select onChange={onChangeAssignedUser} value={ticketInfo?.assignedUser?.id}>
-                            {profiList && profiList.map((type, key) => (
+                            {profiList && profiList.map((type) => (
                                 <option value={type.id} key={type.id}>{type.fullName}</option>
                             ))}
                             {profiListError && (

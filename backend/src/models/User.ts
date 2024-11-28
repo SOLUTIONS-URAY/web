@@ -1,7 +1,7 @@
-import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm"
-import {TicketEvent} from "./TicketEvent";
-import {Ticket} from "./Ticket";
-import {Organization} from "./Organization";
+import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
+import {TicketEvent} from './TicketEvent';
+import {Ticket} from './Ticket';
+import {Organization} from './Organization';
 
 export enum UserRole {
     SYS_ADMIN,
@@ -25,7 +25,7 @@ export class User extends BaseEntity {
     @Column()
     password: string;
 
-    @Column({type: "enum", enum: UserRole})
+    @Column({type: 'enum', enum: UserRole})
     userRole: UserRole;
 
     @OneToMany(() => Ticket, (ticket) => ticket.issuedUser)
@@ -35,11 +35,13 @@ export class User extends BaseEntity {
     assignedTickets: Ticket[];
 
     @Column()
-    isActive: boolean
+    isActive: boolean;
 
     @OneToMany(() => TicketEvent, (ticket_event) => ticket_event.author)
     ticket_events: TicketEvent[];
 
-    @ManyToOne(() => Organization, (organization) => organization.users, {nullable: true})
+    @ManyToOne(() => Organization, (organization) => organization.users, {
+        nullable: true,
+    })
     organization: Organization;
 }

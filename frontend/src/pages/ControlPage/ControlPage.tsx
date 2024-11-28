@@ -9,12 +9,12 @@ import {TICKET_STATUS_CONF} from "../../types/TICKET_STATUS_NAMING.ts";
 
 export const ControlPage = () => {
     const {data, error, isLoading} = useSWR<TicketEntity[]>('/ticket')
-    const {data: ticketTypes, error: ticketTypesError, isLoading: ticketTypesLoading} = useSWR<{
+    const {data: ticketTypes} = useSWR<{
         id: number,
         name: string
     }[]>('/ticket/types')
 
-    const {data: profiList, error: profiListError, isLoading: profiListLoading} = useSWR<{
+    const {data: profiList} = useSWR<{
         id: number,
         fullName: string
     }[]>('/user/profi')
@@ -25,7 +25,7 @@ export const ControlPage = () => {
         .fromEntries(
             Array
                 .from(new Set(data?.map(ticket => ticket.priority) || [])) // Уникальные значение
-                .map((v,k) => [v+"",  TICKET_PRIORITY_CONF[v].name]) // в ключ - значение
+                .map((v) => [v + "", TICKET_PRIORITY_CONF[v].name]) // в ключ - значение
         )
     const [prioritySelectedValues, setPrioritySelectedValues] = useState<string[]>(Object.keys(priorityPossibleValues));
 
@@ -34,7 +34,7 @@ export const ControlPage = () => {
         .fromEntries(
             Array
                 .from(new Set(data?.map(ticket => ticket.type.id) || [])) // Уникальные значение
-                .map((v,k) => [v+"", (ticketTypes?.find(t=>t.id === v)?.name) || "" ]) // в ключ - значение
+                .map((v) => [v + "", (ticketTypes?.find(t => t.id === v)?.name) || ""]) // в ключ - значение
         )
     const [ticketTypeSelectedValues, setTicketTypeSelectedValues] = useState<string[]>(Object.keys(ticketTypePossibleValues));
 
@@ -43,7 +43,7 @@ export const ControlPage = () => {
         .fromEntries(
             Array
                 .from(new Set(data?.map(ticket => ticket.assignedUser?.id) || [])) // Уникальные значение
-                .map((v,k) => [v+"", (profiList?.find(t=>t.id === v)?.fullName) || "" ]) // в ключ - значение
+                .map((v) => [v + "", (profiList?.find(t => t.id === v)?.fullName) || ""]) // в ключ - значение
         )
     const [assignedUserSelectedValues, setAssignedUserSelectedValues] = useState<string[]>(Object.keys(assignedUserPossibleValues));
 
@@ -52,7 +52,7 @@ export const ControlPage = () => {
         .fromEntries(
             Array
                 .from(new Set(data?.map(ticket => ticket.status) || [])) // Уникальные значение
-                .map((v,k) => [v+"", TICKET_STATUS_CONF[v].name]) // в ключ - значение
+                .map((v) => [v + "", TICKET_STATUS_CONF[v].name]) // в ключ - значение
         )
     const [ticketStatusSelectedValues, setTicketStatusSelectedValues] = useState<string[]>(Object.keys(ticketStatusPossibleValues));
 

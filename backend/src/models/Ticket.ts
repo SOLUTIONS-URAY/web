@@ -7,17 +7,17 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
-} from "typeorm"
-import {User} from "./User";
-import {TicketEvent} from "./TicketEvent";
-import {TicketType} from "./TicketType";
+    UpdateDateColumn,
+} from 'typeorm';
+import {User} from './User';
+import {TicketEvent} from './TicketEvent';
+import {TicketType} from './TicketType';
 
 export enum TicketPriority {
     NONE,
     LOW,
     MEDIUM,
-    HIGH
+    HIGH,
 }
 
 export enum TicketStatus {
@@ -25,7 +25,7 @@ export enum TicketStatus {
     WORKING,
     WAITING_CLIENT,
     ANSWER_REQUIRED,
-    CLOSED
+    CLOSED,
 }
 
 @Entity()
@@ -34,16 +34,16 @@ export class Ticket extends BaseEntity {
     id: number;
 
     @Column({
-        type: "enum",
+        type: 'enum',
         enum: TicketPriority,
-        default: TicketPriority.NONE
+        default: TicketPriority.NONE,
     })
     priority: TicketPriority;
 
     @Column()
     title: string;
 
-    @ManyToOne(()=>TicketType)
+    @ManyToOne(() => TicketType)
     type: TicketType;
 
     @ManyToOne(() => User, (user) => user.issuedTickets)
@@ -52,17 +52,23 @@ export class Ticket extends BaseEntity {
     @ManyToOne(() => User, (user) => user.issuedTickets, {nullable: true})
     assignedUser?: User;
 
-    @CreateDateColumn({type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)"})
+    @CreateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+    })
     created_at: Date;
 
-    @UpdateDateColumn({type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)"})
+    @UpdateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+        onUpdate: 'CURRENT_TIMESTAMP(6)',
+    })
     updated_at: Date;
 
-    @Column({type: "enum", enum: TicketStatus})
+    @Column({type: 'enum', enum: TicketStatus})
     status: TicketStatus;
 
     @OneToMany(() => TicketEvent, (ticket_event) => ticket_event.ticket)
     @JoinTable()
     events: TicketEvent[];
-
 }

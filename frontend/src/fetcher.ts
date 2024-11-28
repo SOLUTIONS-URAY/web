@@ -31,7 +31,7 @@ export const fetcher = async <T = unknown>(uri: string, data = {}, method: HttpM
     try {
         resp = await unparsed_response.json();
     } catch (e) {
-        console.error();
+        console.error(e);
         throw new Error(unparsed_response.statusText);
     }
 

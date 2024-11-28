@@ -1,5 +1,4 @@
 import React, {Dispatch, FC, SetStateAction} from "react";
-import {TicketStatus} from "../TicketTable/TicketTable.tsx";
 import "./FilterButton.scss";
 
 type KeyValue = {
@@ -43,7 +42,7 @@ export const FilterButton: FC<FilterButtonProps> = (props) => {
             </div>
             <div className={"filter_button_menu filter_button_menu_"+(props.isVisible && "visible")}>
                 <div className="filter_possible_values_container">
-                    {possibleValuesKeys.map((key, order) => {
+                    {possibleValuesKeys.map((key) => {
                         const value = props.possibleValues[key];
                         return (
                             <div className="filter_possible_value" key={key}>
