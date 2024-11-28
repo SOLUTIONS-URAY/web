@@ -10,9 +10,9 @@ import {TicketType} from '../models/TicketType';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Ticket, TicketEvent, TicketType]),
-      AuthModule,
+    AuthModule,
   ],
   controllers: [TicketController],
-    providers: [TicketService],
+  providers: [TicketService],
 })
 export class TicketModule {}
