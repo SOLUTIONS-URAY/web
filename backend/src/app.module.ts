@@ -4,9 +4,9 @@ import {AppService} from './app.service';
 import {ConfigModule} from '@nestjs/config';
 import {typeOrmConfig} from './db.config';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import { AuthModule } from './auth/auth.module';
-import {JwtModule, JwtService} from "@nestjs/jwt";
-import { TicketModule } from './ticket/ticket.module';
+import {AuthModule} from './auth/auth.module';
+import {TicketModule} from './ticket/ticket.module';
+import {UserModule} from './user/user.module';
 
 @Module({
     imports: [
@@ -15,7 +15,8 @@ import { TicketModule } from './ticket/ticket.module';
         }),
         TypeOrmModule.forRoot(typeOrmConfig),
         AuthModule,
-        TicketModule
+        TicketModule,
+        UserModule
     ],
     controllers: [AppController],
     providers: [AppService],

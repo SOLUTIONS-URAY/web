@@ -252,5 +252,8 @@ export class TicketService {
         event.author = user;
 
         await event.save();
+        return {
+            result: "ok"
+        }
     }
 }

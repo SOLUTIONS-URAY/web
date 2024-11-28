@@ -11,6 +11,7 @@ import {TICKET_STATUS_CONF} from "../../types/TICKET_STATUS_NAMING.ts";
 import {useUserData} from "../../hooks/useUserData.tsx";
 import {TICKET_PRIORITY_CONF} from "../../types/TICKET_PRIORITY_NAMING.ts";
 import useSWR from "swr";
+import {commantTicket} from "../../api/commentTicket.ts";
 
 
 const TicketEventNaming = [
@@ -24,10 +25,13 @@ const TicketEventNaming = [
 ]
 
 export const TicketPage = (props: PropsWithChildren) => {
-    const { ticketId } = useParams();
     const [ticketInfo, setTicketInfo] = useState< TicketEntity | null>();
     const [ticketEvents, setTicketEvents] = useState<TicketEvent[]>([]);
+    const [adderMsgText, setAdderMsgText] = useState("");
+
     const userInfo = useUserData();
+    const {ticketId} = useParams();
+
     const {data: ticketTypes, error: ticketTypesError, isLoading: ticketTypesLoading} = useSWR<{
         id: number,
         name: string
@@ -83,6 +87,30 @@ export const TicketPage = (props: PropsWithChildren) => {
             if (!prevState) return prevState;
             return {...prevState, type: {id: (Number(e.target.value) as TicketStatus)}};
         });
+    }
+
+    // Изменение текста сообщения
+    const onChangeAdderMsgText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setAdderMsgText(e.target.value);
+    }
+    // Отправка сообщения
+    const onSendButtonClick = () => {
+        if (!ticketInfo) return;
+        if (adderMsgText.length < 4) {
+            toast.error("Сообщение слишком короткое (минимум - 4 символа)")
+            return;
+        }
+
+        commantTicket(Number(ticketId), adderMsgText)
+            .then(() => {
+                toast.success("Успешно!")
+                updateTicketInfo()
+                setAdderMsgText("");
+            })
+            .catch((e) => {
+                console.log("Comment error:", e)
+                toast.error("Ошибка")
+            })
     }
 
     return (
@@ -167,9 +195,11 @@ export const TicketPage = (props: PropsWithChildren) => {
                     id=""
                     className="ticket_new_message"
                     placeholder="Сообщение"
+                    value={adderMsgText}
+                    onChange={onChangeAdderMsgText}
                 >
                 </textarea>
-                <button className="send_message">Отправить!</button>
+                <button className="send_message" onClick={onSendButtonClick}>Отправить!</button>
             </div>
         </div>
     );
