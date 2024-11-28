@@ -6,7 +6,7 @@ export type TicketEntity = {
     priority: TicketPriority;
     title: string;
     type: {
-        id?: number;
+        id: number;
         name?: string;
     };
     issuedUser: {
@@ -16,8 +16,8 @@ export type TicketEntity = {
     };
     assignedUser?: {
         id: number;
-        email: string;
-        fullName: string;
+        email?: string;
+        fullName?: string;
     };
     created_at: string;
     status: TicketStatus;

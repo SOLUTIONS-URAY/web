@@ -1,0 +1,19 @@
+div.filter_button_menu {
+    display: none;
+    position: absolute;
+    z-index: 99;
+    margin-top: 2rem;
+    background: #FFF;
+    padding: 20px;
+    border-radius: 15px;
+
+    div.filter_possible_values_container {
+        div.filter_possible_value {
+            margin-bottom: 10px;
+        }
+    }
+
+    &.filter_button_menu_visible {
+        display: block;
+    }
+}

@@ -3,7 +3,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {DataSource, EntityManager, Repository} from "typeorm";
 import {Ticket, TicketPriority} from "../models/Ticket";
 import {TicketEvent, TicketEventType} from "../models/TicketEvent";
-import {User} from "../models/User";
+import {User, UserRole} from "../models/User";
 import {UpdateTicketDto} from "./dto/update.ticket.dto";
 import {TicketType} from "../models/TicketType";
 
@@ -49,10 +49,12 @@ export class TicketService {
                     name: true
                 },
                 issuedUser: {
+                    id: true,
                     fullName: true,
                     email: true,
                 },
                 assignedUser: {
+                    id: true,
                     fullName: true,
                     email: true,
                 },
@@ -81,10 +83,12 @@ export class TicketService {
                     name: true
                 },
                 issuedUser: {
+                    id: true,
                     fullName: true,
                     email: true,
                 },
                 assignedUser: {
+                    id: true,
                     fullName: true,
                     email: true,
                 },
@@ -199,6 +203,27 @@ export class TicketService {
         return ticket;
     }
 
+    async changeAssignedUser(manager: EntityManager, newAssignedUserId: number, user: User, id: number) {
+        const ticket = await manager.findOne(Ticket, {where: {id}, relations: {assignedUser: true}});
+        const newAssignedUser = await manager.findOneBy(User, {id: newAssignedUserId});
+        if (newAssignedUser.userRole !== UserRole.ORG_MASTER)
+            throw new BadRequestException("Указанный пользователь не является специалистом")
+
+        const lastValue = ticket.assignedUser;
+        ticket.assignedUser = newAssignedUser;
+
+        const event = new TicketEvent();
+        event.type = TicketEventType.CHANGE_ASSIGNED_USER;
+        event.message = "c '" + lastValue.fullName + "' на '" + newAssignedUser.fullName + "'";
+        event.ticket = ticket;
+        event.author = user;
+
+        await manager.save(ticket);
+        await manager.save(event);
+
+        return ticket;
+    }
+
     async update(newTicket: UpdateTicketDto, userId: number) {
         await this.dataSource.transaction(async manager => {
             let ticket = await this.ticketsRepository.findOne({
@@ -206,7 +231,8 @@ export class TicketService {
                     id: newTicket.id
                 },
                 relations: {
-                    type: true
+                    type: true,
+                    assignedUser: true
                 }
             });
             const user = await this.dataSource.manager.findOne(User, {
@@ -228,6 +254,9 @@ export class TicketService {
             }
             if (ticket.type.id !== newTicket.type.id) {
                 await this.changeType(manager, newTicket.type.id, user, ticket.id);
+            }
+            if (ticket.assignedUser.id !== newTicket.assignedUser.id) {
+                await this.changeAssignedUser(manager, newTicket.assignedUser.id, user, ticket.id);
             }
 
         });

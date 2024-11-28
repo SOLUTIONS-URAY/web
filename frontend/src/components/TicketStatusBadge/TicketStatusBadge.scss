@@ -1,6 +1,10 @@
 div.ticket_status_badge {
   min-width: 130px;
   border-radius: 0.75rem;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   p.ticket_status_badge_text {
     margin: 0.25rem 1.5rem;

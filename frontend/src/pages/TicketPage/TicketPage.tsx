@@ -37,6 +37,11 @@ export const TicketPage = (props: PropsWithChildren) => {
         name: string
     }[]>('/ticket/types')
 
+    const {data: profiList, error: profiListError, isLoading: profiListLoading} = useSWR<{
+        id: number,
+        fullName: string
+    }[]>('/user/profi')
+
 
     // Обновление информации о тикете
     const updateTicketInfo = () => {
@@ -88,6 +93,14 @@ export const TicketPage = (props: PropsWithChildren) => {
             return {...prevState, type: {id: (Number(e.target.value) as TicketStatus)}};
         });
     }
+    // Изменение специалиста
+    const onChangeAssignedUser = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setTicketInfo((prevState) => {
+            if (!prevState) return prevState;
+            return {...prevState, assignedUser: {id: (Number(e.target.value) as TicketStatus)}};
+        });
+    }
+
 
     // Изменение текста сообщения
     const onChangeAdderMsgText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -154,7 +167,17 @@ export const TicketPage = (props: PropsWithChildren) => {
                 </div>
                 <div className="ticket_info_block">
                     <p className="ticket_info_title">Ответственный:</p>
-                    <input type="text" value={ticketInfo?.assignedUser?.fullName}/>
+                    <select onChange={onChangeAssignedUser} value={ticketInfo?.assignedUser?.id}>
+                        {profiList && profiList.map((type, key) => (
+                            <option value={type.id} key={type.id}>{type.fullName}</option>
+                        ))}
+                        {profiListError && (
+                            <option value={-1}>Ошибка загрузки</option>
+                        )}
+                        {profiListLoading && (
+                            <option value={-1}>Загрузка...</option>
+                        )}
+                    </select>
                 </div>
                 <div className="ticket_info_block">
                     <p className="ticket_info_title">Статус заявки:</p>
