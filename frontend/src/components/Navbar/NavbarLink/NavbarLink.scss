@@ -1,0 +1,37 @@
+div.navbar_link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #F3F3F3;
+  padding: 0.5rem 1.25rem;
+  border-radius: 25px;
+  height: min-content;
+  margin-right: 1.5rem;
+
+  &.navbar_link_active {
+    background: #F9B516;
+
+    p {
+      color: #FFFFFF !important;
+    }
+
+    img {
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  div.navbar_link_name {
+    margin-right: 0.75rem;
+
+    p {
+      margin: 0;
+      color: #616161;
+      font-weight: 600;
+    }
+  }
+
+  div.navbar_link_icon {
+    display: flex;
+    align-items: center;
+  }
+}

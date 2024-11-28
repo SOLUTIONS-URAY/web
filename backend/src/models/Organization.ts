@@ -1,4 +1,12 @@
-import {BaseEntity, Column, Entity, JoinTable, OneToMany, OneToOne, PrimaryGeneratedColumn,} from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    JoinTable,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import {User} from './User';
 
 @Entity()

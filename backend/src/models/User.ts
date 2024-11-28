@@ -1,4 +1,11 @@
-import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import {TicketEvent} from './TicketEvent';
 import {Ticket} from './Ticket';
 import {Organization} from './Organization';
@@ -25,7 +32,7 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Column({type: 'enum', enum: UserRole})
+    @Column({type: 'enum', enum: UserRole})
   userRole: UserRole;
 
   @OneToMany(() => Ticket, (ticket) => ticket.issuedUser)

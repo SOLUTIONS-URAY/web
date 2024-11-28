@@ -21,6 +21,11 @@
     "jsx": "react-jsx",
     "removeComments": true,
     "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
   },
   "types": [
     "vite/client"

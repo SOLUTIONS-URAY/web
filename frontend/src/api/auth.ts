@@ -11,7 +11,8 @@ export enum UserRole {
 export type UserData = {
     id: number,
     userRole: UserRole,
-    email: string
+    email: string,
+    fullName: string
 }
 
 export interface AuthResp {

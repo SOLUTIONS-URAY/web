@@ -1,4 +1,12 @@
-import {BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn,} from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinTable,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import {User} from './User';
 import {Ticket} from './Ticket';
 
