@@ -26,7 +26,7 @@ const TicketEventNaming = [
 ]
 
 export const TicketPage = (props: PropsWithChildren) => {
-    const [ticketInfo, setTicketInfo] = useState< TicketEntity | null>();
+    const [ticketInfo, setTicketInfo] = useState<TicketEntity | null>();
     const [ticketEvents, setTicketEvents] = useState<TicketEvent[]>([]);
     const [adderMsgText, setAdderMsgText] = useState("");
 
@@ -47,7 +47,7 @@ export const TicketPage = (props: PropsWithChildren) => {
     // Обновление информации о тикете
     const updateTicketInfo = () => {
         getTicket(Number(ticketId))
-            .then((ticket)=> {
+            .then((ticket) => {
                 setTicketInfo(ticket)
                 setTicketEvents(ticket.events)
             })
@@ -59,7 +59,7 @@ export const TicketPage = (props: PropsWithChildren) => {
     const onSaveButtonClick = () => {
         if (!ticketInfo) return;
         updateTicket(Number(ticketId), ticketInfo)
-            .then(()=> {
+            .then(() => {
                 toast.success("Успешно!")
                 updateTicketInfo()
             })
@@ -69,7 +69,7 @@ export const TicketPage = (props: PropsWithChildren) => {
     // Изменение приоритета
     const onChangePriority = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setTicketInfo((prevState) => {
-            if(!prevState) return prevState;
+            if (!prevState) return prevState;
             return {...prevState, priority: (Number(e.target.value) as TicketPriority)};
         });
     }
@@ -130,104 +130,103 @@ export const TicketPage = (props: PropsWithChildren) => {
     return (
         <>
             <Navbar/>
-        <div className="ticket_page">
-            <div className="ticket_title">
-                <p style={{fontWeight: 900}}> Тикет #{ticketInfo?.id}: {ticketInfo?.title}</p>
-            </div>
+            <div className="ticket_page">
+                <div className="ticket_title">
+                    <p style={{fontWeight: 900}}> Тикет #{ticketInfo?.id}: {ticketInfo?.title}</p>
+                </div>
 
-            <div className="ticket_info">
-                <div className="ticket_info_block">
-                    <p className="ticket_info_title">Приоритет:</p>
+                <div className="ticket_info">
+                    <div className="ticket_info_block">
+                        <p className="ticket_info_title">Приоритет:</p>
 
-                    <select onChange={onChangePriority} value={ticketInfo?.priority}
-                            disabled={userInfo?.userRole !== 0}>
-                        {TICKET_PRIORITY_CONF.map((priotity, key) => (
-                            <option value={key} key={key}>{priotity.name}</option>
+                        <select onChange={onChangePriority} value={ticketInfo?.priority}
+                                disabled={userInfo?.userRole !== 0}>
+                            {TICKET_PRIORITY_CONF.map((priotity, key) => (
+                                <option value={key} key={key}>{priotity.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="ticket_info_block">
+                        <p className="ticket_info_title">Тема:</p>
+                        <input type="text" value={ticketInfo?.title} onChange={onChangeTitle}/>
+                    </div>
+                    <div className="ticket_info_block">
+                        <p className="ticket_info_title">Тип заявки:</p>
+                        <select onChange={onChangeTicketType} value={ticketInfo?.type.id}>
+                            {ticketTypes && ticketTypes.map((type, key) => (
+                                <option value={type.id} key={type.id}>{type.name}</option>
+                            ))}
+                            {ticketTypesError && (
+                                <option value={-1}>Ошибка загрузки</option>
+                            )}
+                            {ticketTypesLoading && (
+                                <option value={-1}>Загрузка...</option>
+                            )}
+                        </select>
+                    </div>
+                    <div className="ticket_info_block">
+                        <p className="ticket_info_title">Пользователь:</p>
+                        <input type="text" value={ticketInfo?.issuedUser.email}/>
+                    </div>
+                    <div className="ticket_info_block">
+                        <p className="ticket_info_title">Ответственный:</p>
+                        <select onChange={onChangeAssignedUser} value={ticketInfo?.assignedUser?.id}>
+                            {profiList && profiList.map((type, key) => (
+                                <option value={type.id} key={type.id}>{type.fullName}</option>
+                            ))}
+                            {profiListError && (
+                                <option value={-1}>Ошибка загрузки</option>
+                            )}
+                            {profiListLoading && (
+                                <option value={-1}>Загрузка...</option>
+                            )}
+                        </select>
+                    </div>
+                    <div className="ticket_info_block">
+                        <p className="ticket_info_title">Статус заявки:</p>
+                        <select onChange={onChangeStatus} value={ticketInfo?.status}>
+                            {TICKET_STATUS_CONF.map((status, key) => (
+                                <option value={key} key={key}>{status.name}</option>
+                            ))}
+                        </select>
+
+                    </div>
+                    <div className="ticket_info_block">
+                        <button onClick={onSaveButtonClick}>Сохранить</button>
+                    </div>
+                </div>
+
+                <div className="ticket_events">
+                    <div className="ticket_events_title">
+                        <p style={{fontWeight: 900}}>События (Отчёт по тикету):</p>
+                    </div>
+                    <div className="ticket_events_container">
+                        {ticketEvents.length > 0 && ticketEvents.map(ticketEvent => (
+                            <div className="ticket_event" key={ticketEvent.uuid}>
+                                <p className="ticket_event_text">
+                                    В {(new Date(ticketEvent.created_at)).toLocaleString("ru-RU")} пользователь {ticketEvent.author.fullName} {TicketEventNaming[ticketEvent.type]} {ticketEvent.message}
+                                </p>
+                            </div>
                         ))}
-                    </select>
+                        {ticketEvents.length == 0 && <p>Отсутствуют</p>}
+                    </div>
                 </div>
-                <div className="ticket_info_block">
-                    <p className="ticket_info_title">Тема:</p>
-                    <input type="text" value={ticketInfo?.title} onChange={onChangeTitle}/>
-                </div>
-                <div className="ticket_info_block">
-                    <p className="ticket_info_title">Тип заявки:</p>
-                    <select onChange={onChangeTicketType} value={ticketInfo?.type.id}>
-                        {ticketTypes && ticketTypes.map((type, key) => (
-                            <option value={type.id} key={type.id}>{type.name}</option>
-                        ))}
-                        {ticketTypesError && (
-                            <option value={-1}>Ошибка загрузки</option>
-                        )}
-                        {ticketTypesLoading && (
-                            <option value={-1}>Загрузка...</option>
-                        )}
-                    </select>
-                </div>
-                <div className="ticket_info_block">
-                    <p className="ticket_info_title">Пользователь:</p>
-                    <input type="text" value={ticketInfo?.issuedUser.email}/>
-                </div>
-                <div className="ticket_info_block">
-                    <p className="ticket_info_title">Ответственный:</p>
-                    <select onChange={onChangeAssignedUser} value={ticketInfo?.assignedUser?.id}>
-                        {profiList && profiList.map((type, key) => (
-                            <option value={type.id} key={type.id}>{type.fullName}</option>
-                        ))}
-                        {profiListError && (
-                            <option value={-1}>Ошибка загрузки</option>
-                        )}
-                        {profiListLoading && (
-                            <option value={-1}>Загрузка...</option>
-                        )}
-                    </select>
-                </div>
-                <div className="ticket_info_block">
-                    <p className="ticket_info_title">Статус заявки:</p>
-                    <select onChange={onChangeStatus} value={ticketInfo?.status}>
-                        {TICKET_STATUS_CONF.map((status, key) => (
-                            <option value={key} key={key}>{status.name}</option>
-                        ))}
-                    </select>
 
-                </div>
-                <div className="ticket_info_block">
-                    <button onClick={onSaveButtonClick}>Сохранить</button>
+                <div className="ticket_add_message">
+                    <div className="ticket_add_message_title">
+                        <p style={{fontWeight: 900}}>Добавить сообщение:</p>
+                    </div>
+                    <textarea
+                        name=""
+                        id=""
+                        className="ticket_new_message"
+                        placeholder="Сообщение"
+                        value={adderMsgText}
+                        onChange={onChangeAdderMsgText}
+                    ></textarea>
+                    <button className="send_message" onClick={onSendButtonClick}>Отправить!</button>
                 </div>
             </div>
-
-            <div className="ticket_events">
-                <div className="ticket_events_title">
-                    <p style={{fontWeight: 900}}>События (Отчёт по тикету):</p>
-                </div>
-                <div className="ticket_events_container">
-                    {ticketEvents.length > 0 && ticketEvents.map(ticketEvent => (
-                        <div className="ticket_event" key={ticketEvent.uuid}>
-                            <p className="ticket_event_text">
-                                В {(new Date(ticketEvent.created_at)).toLocaleString("ru-RU")} пользователь {ticketEvent.author.fullName} {TicketEventNaming[ticketEvent.type]} {ticketEvent.message}
-                            </p>
-                        </div>
-                    ))}
-                    {ticketEvents.length == 0 && <p>Отсутствуют</p>}
-                </div>
-            </div>
-
-            <div className="ticket_add_message">
-                <div className="ticket_add_message_title">
-                    <p style={{fontWeight: 900}}>Добавить сообщение:</p>
-                </div>
-                <textarea
-                    name=""
-                    id=""
-                    className="ticket_new_message"
-                    placeholder="Сообщение"
-                    value={adderMsgText}
-                    onChange={onChangeAdderMsgText}
-                >
-                </textarea>
-                <button className="send_message" onClick={onSendButtonClick}>Отправить!</button>
-            </div>
-        </div>
-            </>
+        </>
     );
 };
