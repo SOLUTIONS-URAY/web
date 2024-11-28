@@ -12,6 +12,7 @@ import {useUserData} from "../../hooks/useUserData.tsx";
 import {TICKET_PRIORITY_CONF} from "../../types/TICKET_PRIORITY_NAMING.ts";
 import useSWR from "swr";
 import {commantTicket} from "../../api/commentTicket.ts";
+import {Navbar} from "../../components/Navbar/Navbar.tsx";
 
 
 const TicketEventNaming = [
@@ -127,6 +128,8 @@ export const TicketPage = (props: PropsWithChildren) => {
     }
 
     return (
+        <>
+            <Navbar/>
         <div className="ticket_page">
             <div className="ticket_title">
                 <p style={{fontWeight: 900}}> Тикет #{ticketInfo?.id}: {ticketInfo?.title}</p>
@@ -225,5 +228,6 @@ export const TicketPage = (props: PropsWithChildren) => {
                 <button className="send_message" onClick={onSendButtonClick}>Отправить!</button>
             </div>
         </div>
+            </>
     );
 };

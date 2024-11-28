@@ -6,6 +6,7 @@ import {TicketStatus} from "../../components/TicketTable/TicketTable.tsx";
 import {updateTicket} from "../../api/createTicket.ts";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
+import {Navbar} from "../../components/Navbar/Navbar.tsx";
 
 interface TicketCreatePageProps {
 }
@@ -25,7 +26,7 @@ export const TicketCreatePage = (props: PropsWithChildren<TicketCreatePageProps>
     const [ticketTitle, setTicketTitle] = useState("");
 
     useEffect(() => {
-        if(ticketTypes == undefined) return;
+        if (ticketTypes == undefined) return;
         setTicketTypeId(ticketTypes[0].id)
     }, [ticketTypes]);
 
@@ -76,57 +77,60 @@ export const TicketCreatePage = (props: PropsWithChildren<TicketCreatePageProps>
     }
 
     return (
-        <div className="ticket_create_page">
-            <div className="ticket_create_container">
-                <div className="ticket_create_title">
-                    <p className="ticket_create_title">
-                        Cоздание тикета
-                    </p>
-                </div>
-                <div className="ticket_create_input_container">
-                    <div className="ticket_create_input">
-                        <input
-                            type="text"
-                            placeholder="Название обращения"
-                            value={ticketTitle}
-                            onChange={onChangeTicketTitle}
-                        />
+        <>
+            <Navbar/>
+            <div className="ticket_create_page">
+                <div className="ticket_create_container">
+                    <div className="ticket_create_title">
+                        <p className="ticket_create_title">
+                            Cоздание тикета
+                        </p>
                     </div>
-                    <div className="ticket_create_input">
-                        <select onChange={onChangeTicketType} value={ticketTypeId}>
-                            {ticketTypes && ticketTypes.map((type, key) => (
-                                <option value={type.id} key={type.id}>{type.name}</option>
-                            ))}
-                            {ticketTypesError && (
-                                <option value={-1}>Ошибка загрузки</option>
-                            )}
-                            {ticketTypesLoading && (
-                                <option value={-1}>Загрузка...</option>
-                            )}
-                        </select>
-                    </div>
-                    <div className="ticket_create_input">
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={onChangeEmail}
-                            disabled={userData?.userRole === undefined ? false : (userData.userRole > 3)}
-                            placeholder="Email пользователя"
-                        />
-                    </div>
-                    <div className="ticket_create_input">
+                    <div className="ticket_create_input_container">
+                        <div className="ticket_create_input">
+                            <input
+                                type="text"
+                                placeholder="Название обращения"
+                                value={ticketTitle}
+                                onChange={onChangeTicketTitle}
+                            />
+                        </div>
+                        <div className="ticket_create_input">
+                            <select onChange={onChangeTicketType} value={ticketTypeId}>
+                                {ticketTypes && ticketTypes.map((type, key) => (
+                                    <option value={type.id} key={type.id}>{type.name}</option>
+                                ))}
+                                {ticketTypesError && (
+                                    <option value={-1}>Ошибка загрузки</option>
+                                )}
+                                {ticketTypesLoading && (
+                                    <option value={-1}>Загрузка...</option>
+                                )}
+                            </select>
+                        </div>
+                        <div className="ticket_create_input">
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={onChangeEmail}
+                                disabled={userData?.userRole === undefined ? false : (userData.userRole > 3)}
+                                placeholder="Email пользователя"
+                            />
+                        </div>
+                        <div className="ticket_create_input">
                         <textarea
                             placeholder="Текст сообщения"
                             value={ticketText}
                             onChange={onChangeTicketText}
                         >
                         </textarea>
-                    </div>
-                    <div className="ticket_create_input">
-                        <button onClick={onSubmit}>Отправить</button>
+                        </div>
+                        <div className="ticket_create_input">
+                            <button onClick={onSubmit}>Отправить</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };

@@ -35,12 +35,12 @@ export const Routes: Route[] = [
     {
         path: PagePath.ticket_create,
         element: <TicketCreatePage/>,
-        protected: true,
+        protected: false,
     },
     {
         path: PagePath.ticket,
         element: <TicketPage/>,
-        protected: true,
+        protected: false,
     }
 ];
 
