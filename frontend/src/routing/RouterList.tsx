@@ -5,18 +5,21 @@ import {AuthorizedContainer} from "../containers/AuthorizedContainer/AuthorizedC
 import {AuthPage} from "../pages/AuthPage/AuthPage.tsx";
 import {ControlPage} from "../pages/ControlPage/ControlPage.tsx";
 import {TicketPage} from "../pages/TicketPage/TicketPage.tsx";
+import {IndexPage} from "../pages/IndexPage/IndexPage.tsx";
+import {TicketCreatePage} from "../pages/TicketCreatePage/TicketCreatePage.tsx";
 
 export const enum PagePath {
     home = "/",
     auth = "/auth",
     control = "/control",
-    ticket = "/ticket/:ticketId"
+    ticket = "/ticket/:ticketId",
+    ticket_create = "/ticket/create"
 }
 
 export const Routes: Route[] = [
     {
         path: PagePath.home,
-        element: <AuthPage />,
+        element: <IndexPage />,
         protected: false,
     },
     {
@@ -27,6 +30,11 @@ export const Routes: Route[] = [
     {
         path: PagePath.control,
         element: <ControlPage />,
+        protected: true,
+    },
+    {
+        path: PagePath.ticket_create,
+        element: <TicketCreatePage/>,
         protected: true,
     },
     {

@@ -4,6 +4,7 @@ import {GetTicketDto} from "./dto/get.ticket.dto";
 import {UpdateTicketDto} from "./dto/update.ticket.dto";
 import {AuthGuard} from "../auth/auth.guard";
 import {CommentTicketDto} from "./dto/comment.ticket.dto";
+import {CreateTicketDto} from "./dto/create.ticket.dto";
 
 
 @Controller('ticket')
@@ -39,4 +40,8 @@ export class TicketController {
         return await this.ticketService.update(body, req.user.id);
     }
 
+    @Post("/create")
+    async create(@Body() body: CreateTicketDto) {
+        return await this.ticketService.create(body);
+    }
 }

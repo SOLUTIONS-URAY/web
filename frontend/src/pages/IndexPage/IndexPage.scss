@@ -1,0 +1,26 @@
+div.index_page {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+        text-align: center;
+    }
+
+    button {
+        font-weight: 500;
+        background: #F9B516;
+        border: none;
+        color: #FFFFFF;
+        width: 100%;
+        padding: 12px 145px;
+        font-size: 1.75rem;
+        border-radius: 1rem;
+
+        &:hover {
+            background: #e6aa15;
+        }
+    }
+}

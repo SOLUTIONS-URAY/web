@@ -4,7 +4,7 @@ import {FullLogo} from "../Images/FullLogo/FullLogo.tsx";
 import {auth} from "../../api/auth.ts";
 import {toast} from "react-toastify";
 
-const validateEmail = (email) => {
+const validateEmail = (email: string) => {
     return String(email)
         .toLowerCase()
         .match(

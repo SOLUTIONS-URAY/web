@@ -40,6 +40,6 @@ export class User extends BaseEntity {
     @OneToMany(() => TicketEvent, (ticket_event) => ticket_event.author)
     ticket_events: TicketEvent[];
 
-    @ManyToOne(() => Organization, (organization) => organization.users)
+    @ManyToOne(() => Organization, (organization) => organization.users, {nullable: true})
     organization: Organization;
 }

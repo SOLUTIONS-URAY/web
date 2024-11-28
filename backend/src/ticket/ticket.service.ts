@@ -1,11 +1,12 @@
 import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {DataSource, EntityManager, Repository} from "typeorm";
-import {Ticket, TicketPriority} from "../models/Ticket";
+import {Ticket, TicketPriority, TicketStatus} from "../models/Ticket";
 import {TicketEvent, TicketEventType} from "../models/TicketEvent";
 import {User, UserRole} from "../models/User";
 import {UpdateTicketDto} from "./dto/update.ticket.dto";
 import {TicketType} from "../models/TicketType";
+import {CreateTicketDto} from "./dto/create.ticket.dto";
 
 const TICKET_STATUS_NAMES = [
     'Не назначено',
@@ -226,7 +227,7 @@ export class TicketService {
 
     async update(newTicket: UpdateTicketDto, userId: number) {
         await this.dataSource.transaction(async manager => {
-            let ticket = await this.ticketsRepository.findOne({
+            let ticket = await manager.findOne(Ticket, {
                 where: {
                     id: newTicket.id
                 },
@@ -235,7 +236,7 @@ export class TicketService {
                     assignedUser: true
                 }
             });
-            const user = await this.dataSource.manager.findOne(User, {
+            const user = await manager.findOne(User, {
                 where: {id: userId}
             })
 
@@ -284,5 +285,46 @@ export class TicketService {
         return {
             result: "ok"
         }
+    }
+
+    async create(newTicket: CreateTicketDto) {
+        return await this.dataSource.transaction(async manager => {
+            let user = await manager.findOne(User, {
+                where: {email: newTicket.email}
+            })
+            if (!user) {
+                user = new User();
+                user.fullName = "Не указан";
+                user.userRole = UserRole.ORG_USER;
+                user.email = newTicket.email;
+                user.isActive = false;
+                user.password = "";
+                user.organization = null;
+                await manager.save(user);
+            }
+
+
+            let ticket_type = await manager.findOne(TicketType, {
+                where: {id: newTicket.typeId}
+            });
+            if(!ticket_type) throw new BadRequestException("Тип заявки с таким ID не найден")
+
+            const ticket = new Ticket();
+            ticket.title = newTicket.title;
+            ticket.status = TicketStatus.NOT_ASSIGNED;
+            ticket.priority = TicketPriority.NONE;
+            ticket.issuedUser = user;
+            ticket.type = ticket_type;
+            await manager.save(ticket);
+
+            const firstEvent = new TicketEvent();
+            firstEvent.ticket = ticket;
+            firstEvent.author = user;
+            firstEvent.type = TicketEventType.ADD_COMMENTARY;
+            firstEvent.message = newTicket.text;
+            await manager.save(firstEvent);
+
+            return ticket;
+        });
     }
 }
