@@ -3,8 +3,9 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {fetcher} from "../../fetcher.ts";
 import {SWRConfig} from "swr";
+import {FC, PropsWithChildren} from "react";
 
-export const MainContainer = ({children}) => {
+export const MainContainer: FC<PropsWithChildren> = ({children}) => {
     return (
         <>
             <SWRConfig value={{

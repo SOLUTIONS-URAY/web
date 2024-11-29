@@ -35,9 +35,53 @@ div.navbar {
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding: 5px 0;
 
-    button.navbar_exit {
-      height: min-content;
+    div.navbar_create_ticket {
+      margin-right: 30px;
+
+      button.navbar_create_ticket {
+        display: flex;
+        align-items: center;
+        background: transparent;
+        border: 3px #F9B516 solid;
+        border-radius: 25px;
+        padding: 0 18px;
+
+        p {
+          font-weight: 700;
+          color: #F9B516;
+          font-size: 1rem;
+          margin: 12px 8px 12px 0;
+        }
+      }
+    }
+
+    div.navbar_user {
+      display: flex;
+      align-items: center;
+      background: #F3F3F3;
+      padding: 0 18px;
+      border-radius: 25px;
+
+      p.navbar_username {
+        color: #8A8A8E;
+        font-weight: 700;
+        font-size: 1rem;
+        margin: 15px 7px 15px 0;
+      }
+
+      button.navbar_exit {
+        height: min-content;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        border: none;
+
+        img {
+          padding: 0;
+        }
+      }
     }
   }
 }

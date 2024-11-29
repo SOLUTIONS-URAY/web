@@ -3,6 +3,9 @@ import "./Navbar.scss";
 import {useNavigate} from "react-router-dom";
 import {useUserData} from "../../hooks/useUserData.tsx";
 import {NavbarLink} from "./NavbarLink/NavbarLink.tsx";
+import exit_icon from "@/src/assets/exit_icon.svg";
+import plus_icon from "@/src/assets/plus.svg";
+
 
 export const Navbar = () => {
     const navigate = useNavigate();
@@ -40,12 +43,15 @@ export const Navbar = () => {
             <div className="navbar_right">
                 <div className="navbar_create_ticket">
                     <button className="navbar_create_ticket" onClick={goToCreateTicket}>
-                        Создать заявку
+                        <p className="navbar_create_ticket_text">Создать заявку</p>
+                        <img className="navbar_exit_icon" src={plus_icon} alt=""/>
                     </button>
                 </div>
                 <div className="navbar_user">
-                    <div className="navbar_username">{userData?.fullName}</div>
-                    <button className="navbar_exit" onClick={() => navigate("/")}>Выйти</button>
+                    <p className="navbar_username">{userData?.fullName}</p>
+                    <button className="navbar_exit" onClick={() => navigate("/")}>
+                        <img className="navbar_exit_icon" src={exit_icon} alt=""/>
+                    </button>
                 </div>
             </div>
         </div>
