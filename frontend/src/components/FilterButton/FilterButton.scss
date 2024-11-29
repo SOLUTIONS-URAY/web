@@ -1,19 +1,115 @@
-div.filter_button_menu {
-    display: none;
-    position: absolute;
-    z-index: 99;
-    margin-top: 2rem;
-    background: #FFF;
-    padding: 20px;
-    border-radius: 15px;
+div.filter_group {
+    margin-right: 25px;
+    display: flex;
+    justify-content: center;
 
-    div.filter_possible_values_container {
-        div.filter_possible_value {
-            margin-bottom: 10px;
+    * {
+        font-family: "Manrope", sans-serif;
+    }
+
+    div.filter_button_container {
+        button.filter_button {
+            display: flex;
+            align-items: center;
+            border-radius: 25px;
+            border: 0;
+            background: #F3F3F3;
+            padding: 0 18px;
+            transition: background-color 100ms linear;
+
+            p.filter_button_name {
+                color: #616161;
+                font-size: 1rem;
+                font-weight: 500;
+                margin: 10px 8px 10px 0;
+                transition: color 100ms linear;
+            }
+
+            img.filter_button_icon {
+
+            }
+        }
+
+        &.filter_button_container_active {
+            button.filter_button {
+                background: #F9B516;
+
+                p.filter_button_name {
+                    color: #FFFFFF;
+                }
+
+                img {
+                    filter: brightness(0) invert(1);
+                }
+            }
         }
     }
 
-    &.filter_button_menu_visible {
-        display: block;
+
+    div.filter_button_menu {
+        display: none;
+        position: absolute;
+        z-index: 99;
+        margin-top: 2rem;
+        background: #FFF;
+        padding: 20px;
+        border-radius: 15px;
+        transform: translateY(20px);
+
+        div.filter_possible_values_container {
+            div.filter_possible_value {
+                margin-bottom: 20px;
+
+                input {
+                    position: absolute;
+                    left: -9999px;
+                }
+                input+label::before {
+                    content: '';
+                    display: inline-block;
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    flex-shrink: 0;
+                    flex-grow: 0;
+                    border-radius: 0.25em;
+                    margin-right: 0.5em;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    background-size: 50% 50%;
+                    background-color: #F3F3F3;
+                }
+                input:checked+label::before {
+                    background-color: #F9B516;
+                }
+
+                label {
+                    color: #8A8A8E;
+                    font-size: 1rem;
+                    display: flex;
+                    align-items: center;
+                    font-weight: 400;
+                }
+            }
+        }
+
+        &.filter_button_menu_visible {
+            display: block;
+        }
+
+        div.filter_button_menu_save_button {
+            display: flex;
+
+            button.filter_button_menu_save_button {
+                background-color: #F9B516;
+                color: #FFFFFF;
+                border: none;
+                flex: 1;
+                padding: 9px 0;
+                border-radius: 10px;
+                font-size: 1rem;
+                font-weight: 400;
+            }
+        }
     }
+
 }
