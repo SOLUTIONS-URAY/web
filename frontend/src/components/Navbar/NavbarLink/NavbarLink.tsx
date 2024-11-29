@@ -11,12 +11,15 @@ const navbarIcons = {
     "people": people_icon
 }
 
+export type NavbarIcon = keyof typeof navbarIcons;
+
 interface NavbarLinkProps {
-    icon: keyof typeof navbarIcons,
+    icon: NavbarIcon,
     name: string,
     uri: string,
     isActive?: boolean
 }
+
 
 export const NavbarLink: FC<NavbarLinkProps> = (props) => {
     const navigate = useNavigate();

@@ -109,6 +109,7 @@ export const TicketTable: FC<TicketTableProps> = ({tickets}) => {
                             onSort={onSortRequest}
                             selectedSortKey={sortKey}
                             sortDirection={sortDirection}
+                            key={collumn.name}
                         />
                     ))}
                 </tr>
@@ -117,34 +118,36 @@ export const TicketTable: FC<TicketTableProps> = ({tickets}) => {
                 {resolvesTickets.map(ticket => {
                     const ticketDate = new Date(ticket.created_at);
                     return (
-                        <>
-                            <tr key={ticket.id} onClick={() => navigate("/ticket/" + ticket.id)}>
-                                <td>
-                                    {ticket.id}
-                                </td>
-                                <td>
-                                    <PriorityIcon type={ticket.priority}/>
-                                </td>
-                                <td>
-                                    {ticket.title}
-                                </td>
-                                <td>
-                                    {ticket.type.name}
-                                </td>
-                                <td>
-                                    {ticket.issuedUser.email}
-                                </td>
-                                <td>
-                                    {ticket.assignedUser?.fullName || "Не назначен"}
-                                </td>
-                                <td>
-                                    {ticketDate.toLocaleDateString("ru-RU")} ({ticketDate.getHours()}:{ticketDate.getMinutes()})
-                                </td>
-                                <td>
-                                    <TicketStatusBadge status={ticket.status}/>
-                                </td>
-                            </tr>
-                        </>
+                        <tr key={ticket.id} onClick={() => navigate("/ticket/" + ticket.id)}>
+                            <td>
+                                {ticket.id}
+                            </td>
+                            <td>
+                                <PriorityIcon type={ticket.priority}/>
+                            </td>
+                            <td>
+                                {ticket.title}
+                            </td>
+                            <td>
+                                {ticket.type.name}
+                            </td>
+                            <td>
+                                {ticket.issuedUser.email}
+                            </td>
+                            <td>
+                                {ticket.assignedUser?.fullName || "Не назначен"}
+                            </td>
+                            <td>
+                                {ticketDate.toLocaleDateString("ru-RU")} (
+                                {ticketDate.getHours() < 10 && "0"}{ticketDate.getHours()}
+                                :
+                                {ticketDate.getMinutes() < 10 && "0"}{ticketDate.getMinutes()}
+                                )
+                            </td>
+                            <td>
+                                <TicketStatusBadge status={ticket.status}/>
+                            </td>
+                        </tr>
                     )
                 })}
                 </tbody>

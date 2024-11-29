@@ -1,15 +1,17 @@
 import {FullLogo} from "../Images/FullLogo/FullLogo.tsx";
 import "./Navbar.scss";
-import {useNavigate} from "react-router-dom";
+import {matchPath, useNavigate} from "react-router-dom";
 import {useUserData} from "../../hooks/useUserData.tsx";
 import {NavbarLink} from "./NavbarLink/NavbarLink.tsx";
 import exit_icon from "@/src/assets/exit_icon.svg";
 import plus_icon from "@/src/assets/plus.svg";
+import {getRoutes} from "@/src/routing/RouterList.tsx";
 
 
 export const Navbar = () => {
     const navigate = useNavigate();
     const userData = useUserData();
+    const routes = getRoutes(userData !== null);
 
     const goToCreateTicket = () => {
         navigate("/ticket/create");
@@ -22,22 +24,21 @@ export const Navbar = () => {
                     <FullLogo/>
                 </div>
                 <div className="navbar_links">
-                    <NavbarLink
-                        name="Все заявки"
-                        icon="folder"
-                        uri="/control"
-                        isActive={true}
-                    />
-                    <NavbarLink
-                        name="Текущая заявка"
-                        icon="pencil"
-                        uri="/control/my"
-                    />
-                    <NavbarLink
-                        name="Персонал"
-                        icon="people"
-                        uri="/personal"
-                    />
+                    {
+                        routes.map((route) => {
+                            if(route.navbarIcon === undefined || route.hidden === true) return <></>;
+                            const isActiveRoute = matchPath(window.location.pathname, route.path) !== null;
+                            return (
+                                <NavbarLink
+                                    name={route.name}
+                                    icon={route.navbarIcon}
+                                    uri={route.path}
+                                    isActive={isActiveRoute}
+                                    key={route.path}
+                                />
+                            )
+                        })
+                    }
                 </div>
             </div>
             <div className="navbar_right">
