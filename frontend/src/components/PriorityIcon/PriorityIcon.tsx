@@ -6,10 +6,10 @@ import low_icon from "@/src/assets/priority/low.svg";
 import none_icon from "@/src/assets/priority/none.svg";
 
 const PRIORITY_ICONS = [
-    hight_icon,
-    medium_icon,
+    none_icon,
     low_icon,
-    none_icon
+    medium_icon,
+    hight_icon,
 ]
 
 interface PriorityIconProps {

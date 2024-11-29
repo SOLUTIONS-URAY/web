@@ -17,6 +17,9 @@ div.control_table {
                 &:nth-child(1) {
                     width: 8%;
                 }
+                &:nth-child(8) {
+                    width: 12%;
+                }
             }
         }
         td {
