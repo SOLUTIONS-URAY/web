@@ -258,8 +258,13 @@ export class TicketService {
 
     const event = new TicketEvent();
     event.type = TicketEventType.CHANGE_ASSIGNED_USER;
-    event.message =
-      "c '" + lastValue.fullName + "' на '" + newAssignedUser.fullName + "'";
+    if(lastValue){
+      event.message =
+          "c '" + lastValue.fullName + "' на '" + newAssignedUser.fullName + "'";
+    } else {
+      event.message =
+          "c 'Не назначен' на '" + newAssignedUser.fullName + "'";
+    }
     event.ticket = ticket;
     event.author = user;
 
@@ -305,7 +310,7 @@ export class TicketService {
       if (ticket.type.id !== newTicket.type.id) {
         await this.changeType(manager, newTicket.type.id, user, ticket.id);
       }
-      if (ticket.assignedUser.id !== newTicket.assignedUser.id) {
+      if (ticket.assignedUser?.id !== newTicket.assignedUser.id) {
         await this.changeAssignedUser(
           manager,
           newTicket.assignedUser.id,

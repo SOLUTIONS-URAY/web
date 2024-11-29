@@ -170,7 +170,10 @@ export const TicketPage = () => {
                     </div>
                     <div className="ticket_info_block">
                         <p className="ticket_info_title">Ответственный:</p>
-                        <select onChange={onChangeAssignedUser} value={ticketInfo?.assignedUser?.id}>
+                        <select onChange={onChangeAssignedUser} value={ticketInfo?.assignedUser?.id || -1}>
+                            {ticketInfo?.assignedUser?.id === undefined &&
+                                <option value="-1" >Не назначен</option>
+                            }
                             {profiList && profiList.map((type) => (
                                 <option value={type.id} key={type.id}>{type.fullName}</option>
                             ))}
