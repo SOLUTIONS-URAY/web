@@ -23,7 +23,7 @@ export const TicketCreatePage = () => {
     const [ticketTitle, setTicketTitle] = useState("");
 
     useEffect(() => {
-        if (ticketTypes == undefined) return;
+        if (ticketTypes == undefined || ticketTypes.length < 1) return;
         setTicketTypeId(ticketTypes[0].id)
     }, [ticketTypes]);
 
