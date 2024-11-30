@@ -129,7 +129,6 @@ export const TicketPage = () => {
 
     return (
         <>
-            <Navbar/>
             <div className="ticket_page">
                 <div className="ticket_title">
                     <p style={{fontWeight: 900}}> Тикет #{ticketInfo?.id}: {ticketInfo?.title}</p>

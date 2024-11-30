@@ -65,7 +65,7 @@ export const TicketCreatePage = () => {
             title: ticketTitle
         })
             .then((ticket) => {
-                navigate("/ticket/" + ticket.id)
+                navigate("/tickets/" + ticket.id)
             })
             .catch((err) => {
                 console.error("Ошибка создания тикета:", err);

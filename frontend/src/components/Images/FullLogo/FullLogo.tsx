@@ -1,9 +1,10 @@
 import "./FullLogo.scss";
 import {useNavigate} from "react-router-dom";
+import {PagePath} from "@/src/routing/RouterList.tsx";
 export const FullLogo = () => {
     const navigate = useNavigate();
     const onClick = () => {
-            navigate("/control");
+            navigate(PagePath.tickets_list);
     }
     return (
         <svg onClick={onClick}width="239" height="66" viewBox="0 0 239 66" fill="none" xmlns="http://www.w3.org/2000/svg">

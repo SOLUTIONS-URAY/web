@@ -1,14 +1,15 @@
 import {
   BaseEntity,
   Column,
-  Entity,
+  Entity, JoinColumn,
   ManyToOne,
-  OneToMany,
+  OneToMany, OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TicketEvent } from './TicketEvent';
 import { Ticket } from './Ticket';
 import { Organization } from './Organization';
+import {TelegramMatch} from "./TelegramMatch";
 
 export enum UserRole {
   SYS_ADMIN,
@@ -51,4 +52,9 @@ export class User extends BaseEntity {
     nullable: true,
   })
   organization: Organization;
+
+
+  @OneToOne(()=>TelegramMatch, (telegram_match)=> telegram_match.user)
+  @JoinColumn()
+  telegramMatch: TelegramMatch;
 }

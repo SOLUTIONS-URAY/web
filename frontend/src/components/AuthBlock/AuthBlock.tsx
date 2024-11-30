@@ -3,6 +3,7 @@ import "./AuthBlock.scss";
 import {FullLogo} from "../Images/FullLogo/FullLogo.tsx";
 import {auth} from "../../api/auth.ts";
 import {toast} from "react-toastify";
+import {PagePath} from "@/src/routing/RouterList.tsx";
 
 const validateEmail = (email: string) => {
     return String(email)
@@ -43,7 +44,7 @@ export const AuthBlock = () => {
                 localStorage.setItem("access_token", access_token);
                 localStorage.setItem("user_data", JSON.stringify(user_data));
 
-                window.location.href = '/control';
+                window.location.href = PagePath.tickets_list;
             })
             .catch((err)=>{
                 toast.error(err.message || "Неизвестная ошибка");

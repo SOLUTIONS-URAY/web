@@ -5,7 +5,8 @@ import {useUserData} from "../../hooks/useUserData.tsx";
 import {NavbarLink} from "./NavbarLink/NavbarLink.tsx";
 import exit_icon from "@/src/assets/exit_icon.svg";
 import plus_icon from "@/src/assets/plus.svg";
-import {getRoutes} from "@/src/routing/RouterList.tsx";
+import {getRoutes, PagePath} from "@/src/routing/RouterList.tsx";
+import {useCallback, useMemo} from "react";
 
 
 export const Navbar = () => {
@@ -13,8 +14,18 @@ export const Navbar = () => {
     const userData = useUserData();
     const routes = getRoutes(userData !== null);
 
+    const firstPage = useMemo(()=>{
+        return routes.find(r => !r.hidden)
+    }, [])
+
+    const goToCreateTicket2 = useCallback(() => {
+        if(firstPage?.path !== undefined){
+            navigate(firstPage.path);
+        }
+    },[firstPage?.path]);
+
     const goToCreateTicket = () => {
-        navigate("/ticket/create");
+        navigate(PagePath.ticket_create);
     };
 
     return (

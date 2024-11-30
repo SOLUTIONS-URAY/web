@@ -3,14 +3,15 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, EntityManager, Repository } from 'typeorm';
-import { Ticket, TicketPriority, TicketStatus } from '../models/Ticket';
-import { TicketEvent, TicketEventType } from '../models/TicketEvent';
-import { User, UserRole } from '../models/User';
-import { UpdateTicketDto } from './dto/update.ticket.dto';
-import { TicketType } from '../models/TicketType';
-import { CreateTicketDto } from './dto/create.ticket.dto';
+import {InjectRepository} from '@nestjs/typeorm';
+import {DataSource, EntityManager, Repository} from 'typeorm';
+import {Ticket, TicketPriority, TicketStatus} from '../models/Ticket';
+import {TicketEvent, TicketEventType} from '../models/TicketEvent';
+import {User, UserRole} from '../models/User';
+import {UpdateTicketDto} from './dto/update.ticket.dto';
+import {TicketType} from '../models/TicketType';
+import {CreateTicketDto} from './dto/create.ticket.dto';
+import {RedisService} from "../redis/redis.service";
 
 const TICKET_STATUS_NAMES = [
   'Не назначено',
@@ -31,7 +32,9 @@ export class TicketService {
     @InjectRepository(TicketType)
     private ticketTypesRepository: Repository<TicketType>,
     private dataSource: DataSource,
-  ) {}
+    private redisService: RedisService,
+  ) {
+  }
 
   async getTicketTypes() {
     return await this.ticketTypesRepository.find();
@@ -139,7 +142,7 @@ export class TicketService {
     user: User,
     id: number,
   ) {
-    const ticket = await manager.findOneBy(Ticket, { id });
+    const ticket = await manager.findOneBy(Ticket, {id});
     const lastValue = ticket.priority;
     ticket.priority = newPriority;
 
@@ -166,7 +169,7 @@ export class TicketService {
     user: User,
     id: number,
   ) {
-    const ticket = await manager.findOneBy(Ticket, { id });
+    const ticket = await manager.findOneBy(Ticket, {id});
     const lastValue = ticket.title;
     ticket.title = newTitle;
 
@@ -179,6 +182,8 @@ export class TicketService {
     await manager.save(ticket);
     await manager.save(event);
 
+    await this.sendToRedis(event);
+
     return ticket;
   }
 
@@ -188,7 +193,7 @@ export class TicketService {
     user: User,
     id: number,
   ) {
-    const ticket = await manager.findOneBy(Ticket, { id });
+    const ticket = await manager.findOneBy(Ticket, {id});
     const lastValue = ticket.status;
     ticket.status = newStatus;
 
@@ -206,6 +211,8 @@ export class TicketService {
     await manager.save(ticket);
     await manager.save(event);
 
+    await this.sendToRedis(event);
+
     return ticket;
   }
 
@@ -216,10 +223,10 @@ export class TicketService {
     id: number,
   ) {
     const ticket = await manager.findOne(Ticket, {
-      where: { id },
-      relations: { type: true },
+      where: {id},
+      relations: {type: true},
     });
-    const newType = await manager.findOneBy(TicketType, { id: newTypeId });
+    const newType = await manager.findOneBy(TicketType, {id: newTypeId});
     const lastValue = ticket.type;
     ticket.type = newType;
 
@@ -232,6 +239,8 @@ export class TicketService {
     await manager.save(ticket);
     await manager.save(event);
 
+    await this.sendToRedis(event);
+
     return ticket;
   }
 
@@ -242,8 +251,8 @@ export class TicketService {
     id: number,
   ) {
     const ticket = await manager.findOne(Ticket, {
-      where: { id },
-      relations: { assignedUser: true },
+      where: {id},
+      relations: {assignedUser: true},
     });
     const newAssignedUser = await manager.findOneBy(User, {
       id: newAssignedUserId,
@@ -258,18 +267,20 @@ export class TicketService {
 
     const event = new TicketEvent();
     event.type = TicketEventType.CHANGE_ASSIGNED_USER;
-    if(lastValue){
+    if (lastValue) {
       event.message =
-          "c '" + lastValue.fullName + "' на '" + newAssignedUser.fullName + "'";
+        "c '" + lastValue.fullName + "' на '" + newAssignedUser.fullName + "'";
     } else {
       event.message =
-          "c 'Не назначен' на '" + newAssignedUser.fullName + "'";
+        "c 'Не назначен' на '" + newAssignedUser.fullName + "'";
     }
     event.ticket = ticket;
     event.author = user;
 
     await manager.save(ticket);
     await manager.save(event);
+
+    await this.sendToRedis(event);
 
     return ticket;
   }
@@ -286,7 +297,7 @@ export class TicketService {
         },
       });
       const user = await manager.findOne(User, {
-        where: { id: userId },
+        where: {id: userId},
       });
 
       if (!ticket)
@@ -310,22 +321,24 @@ export class TicketService {
       if (ticket.type.id !== newTicket.type.id) {
         await this.changeType(manager, newTicket.type.id, user, ticket.id);
       }
-      if (ticket.assignedUser?.id !== newTicket.assignedUser.id) {
-        await this.changeAssignedUser(
-          manager,
-          newTicket.assignedUser.id,
-          user,
-          ticket.id,
-        );
+      if (newTicket.assignedUser) {
+        if (ticket.assignedUser?.id !== newTicket.assignedUser.id) {
+          await this.changeAssignedUser(
+            manager,
+            newTicket.assignedUser.id,
+            user,
+            ticket.id,
+          );
+        }
       }
     });
 
-    return await this.ticketsRepository.findOneBy({ id: newTicket.id });
+    return await this.ticketsRepository.findOneBy({id: newTicket.id});
   }
 
   async comment(msg: string, userId: number, id: number) {
     const user = await this.dataSource.manager.findOne(User, {
-      where: { id: userId },
+      where: {id: userId},
     });
     const ticket = await this.ticketsRepository.findOne({
       where: {
@@ -348,7 +361,7 @@ export class TicketService {
   async create(newTicket: CreateTicketDto) {
     return await this.dataSource.transaction(async (manager) => {
       let user = await manager.findOne(User, {
-        where: { email: newTicket.email },
+        where: {email: newTicket.email},
       });
       if (!user) {
         user = new User();
@@ -362,7 +375,7 @@ export class TicketService {
       }
 
       const ticket_type = await manager.findOne(TicketType, {
-        where: { id: newTicket.typeId },
+        where: {id: newTicket.typeId},
       });
       if (!ticket_type)
         throw new BadRequestException('Тип заявки с таким ID не найден');
@@ -385,4 +398,42 @@ export class TicketService {
       return ticket;
     });
   }
+
+  async sendToRedis(event: TicketEvent) {
+    const ticket = await this.ticketsRepository.findOne({
+      where: {
+        id: event.ticket.id
+      },
+      select: {
+        id:true,
+        priority: true,
+        title: true,
+        created_at: true,
+        status: true,
+        issuedUser: {
+          id: true,
+          fullName: true,
+          email: true,
+        },
+        assignedUser: {
+          id: true,
+          fullName: true,
+          email: true,
+        },
+        type: {
+          id: true,
+          name: true
+        }
+      },
+      relations: {
+        issuedUser: true,
+        assignedUser: true,
+        type: true,
+      }
+    });
+    this.redisService.pubUpdate(JSON.stringify({
+      ...event, ticket
+    }))
+  }
+
 }

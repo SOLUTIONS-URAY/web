@@ -118,7 +118,7 @@ export const TicketTable: FC<TicketTableProps> = ({tickets}) => {
                 {resolvesTickets.map(ticket => {
                     const ticketDate = new Date(ticket.created_at);
                     return (
-                        <tr key={ticket.id} onClick={() => navigate("/ticket/" + ticket.id)}>
+                        <tr key={ticket.id} onClick={() => navigate("/tickets/" + ticket.id)}>
                             <td>
                                 {ticket.id}
                             </td>

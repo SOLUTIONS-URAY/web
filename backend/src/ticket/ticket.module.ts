@@ -6,6 +6,7 @@ import { Ticket } from '../models/Ticket';
 import { AuthModule } from '../auth/auth.module';
 import { TicketEvent } from '../models/TicketEvent';
 import { TicketType } from '../models/TicketType';
+import { RedisService } from 'src/redis/redis.service';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { TicketType } from '../models/TicketType';
     AuthModule,
   ],
   controllers: [TicketController],
-  providers: [TicketService],
+  providers: [TicketService, RedisService],
 })
 export class TicketModule {}
