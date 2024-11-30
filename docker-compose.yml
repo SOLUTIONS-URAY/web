@@ -25,7 +25,7 @@ services:
       PGPORT: ${PGPORT}
       PGHOST: ${PGHOST}
       PRODUCT_URL: ${PRODUCT_URL}
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://172.17.0.1:6379
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     build:
